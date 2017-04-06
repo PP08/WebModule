@@ -1,0 +1,9 @@
+{% extends 'noisesearch/base.html' %}
+
+{% block content %}
+    <h1>Upload file to test form</h1>
+    <form method="post" enctype="multipart/form-data">
+        {{ form_single.as_p }}
+        <button type="submit" class="btn btn-primary"> Upload </button>
+    </form>
+{% endblock %}
