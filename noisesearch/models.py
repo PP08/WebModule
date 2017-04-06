@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 # Create your models here.
 class Document_Single(models.Model):
@@ -13,11 +14,13 @@ class Document_Multiple(models.Model):
 
 class Table_single(models.Model):
     id = models.AutoField(primary_key=True)
-    device_id = models.TextField()
+    device_id = models.CharField(max_length=30)
     latitude = models.FloatField()
     longitude = models.FloatField()
     spl_value = models.FloatField()
-    measured_at = models.DateTimeField()
+    measured_at = models.DateTimeField(default=datetime.datetime.now())
+    def __str__(self):
+        return str(self.measured_at)
 
     class Meta:
         db_table = "single_measurement"
