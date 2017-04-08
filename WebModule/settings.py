@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'noisesearch',
 ]
 
@@ -78,7 +79,7 @@ WSGI_APPLICATION = 'WebModule.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'noise_search',
+        'NAME': 'noisesearch',
         'USER': 'phucphuong',
         'PASSWORD': '',
         'HOST': 'localhost',

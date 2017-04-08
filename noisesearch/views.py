@@ -1,21 +1,55 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .forms import DocumentForm_Single, DocumentForm_Multiple
 from django.views.decorators.csrf import csrf_exempt
-
-from .HandleUploadedFile import handle_uploaded_file
+from .handleUploadedFile import handle_uploaded_file
+from .models import Sum_measurement_single
+from django.core import serializers
+import json
 
 # Create your views here.
 
 def home_page(request):
-    return render(request, 'noisesearch/home.html', {})
+    objects = Sum_measurement_single.objects.all()
+    json_data = serializers.serialize("json", objects)
+
+    tobjects = json.loads(json_data)
+    print('-' * 50)
+    print(tobjects)
+    print(len(tobjects))
+    k = 0
+    cells = []
+
+    del tobjects[0]
+    print('-' * 50)
+    print(len(tobjects))
+
+    print(tobjects[0]['fields']['latitude'])
+
+    while(len(tobjects) != 0):
+        cell = []
+        x0 = tobjects[0]['fields']['latitude']
+        y0 = tobjects[0]['fields']['longitude']
+        del tobjects[0]
+
+        for object in tobjects:
+            x1 = object['fields']['latitude']
+            y1 = object['fields']['longitude']
+            if  pow((x1 - x0), 2) + pow((y1 - y0), 2) < 10:
+                cell.append(object)
+                del object
+                
+        cells.append(cells)
+        k = k + 1
+    print('-' * 50)
+    print(len(cells))
+
+    return render(request, 'noisesearch/home.html', {'points': json_data})
 
 @csrf_exempt
 def model_form_single(request):
     if request.method == 'POST':
-        # if request.FILES["single"]:
         form_single = DocumentForm_Single(request.POST, request.FILES)
         if form_single.is_valid():
-            # handle_uploaded_file(request.FILES['single'])
             file = form_single.save()
             file_name = file.single
             handle_uploaded_file(str(file_name))
