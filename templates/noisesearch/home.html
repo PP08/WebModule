@@ -28,11 +28,14 @@
             var longitude = points[i]["fields"].longitude;
             var splvalue = points[i]["fields"].average_spl_value;
             var marker = L.marker([latitude, longitude]).addTo(mymap);
-            marker.bindPopup('<b>SPL value:</b><br>' + splvalue.toString() + '<strong> dB</strong><br><br><button type="button" class="btn btn-default" onclick="myFunction()">Details</button>');
+            marker.bindPopup('<b>SPL value:</b><br>' + splvalue.toString() + '<strong> dB</strong><br><br><button type="button" class="btn btn-default" id="' + i.toString() + '" onClick="myFunction(this.id)">Details</button>');
+{#            marker.bindPopup('<b>SPL value:</b><br>' + splvalue.toString() + '<strong> dB</strong><br><br><button type="button" class="btn btn-default btn-details"' + 'id="' + i.toString() + '">Details</button>');#}
+        }
+
+        function myFunction(clicked_id) {
+            var id = clicked_id;
 
         }
-        function myFunction() {
-            alert("success");
-        }
+
     </script>
 {% endblock %}

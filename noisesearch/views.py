@@ -5,6 +5,7 @@ from .handleUploadedFile import handle_uploaded_file
 from .models import Sum_measurement_single
 from django.core import serializers
 import json
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -38,8 +39,7 @@ def home_page(request):
                 cell.append(object)
                 del object
                 
-        cells.append(cells)
-        k = k + 1
+        cells.append(cell)
     print('-' * 50)
     print(len(cells))
 
@@ -57,3 +57,10 @@ def model_form_single(request):
     else:
         form_single = DocumentForm_Single()
         return render(request, 'noisesearch/form_single.html', {'form_single': form_single, })
+
+
+def test_ajax(request):
+    print(request)
+    if  request.POST:
+        print(request.POST)
+    return HttpResponse('success')
