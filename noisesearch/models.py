@@ -19,6 +19,8 @@ class Sum_measurement_single(models.Model):
     longitude = models.FloatField()
     average_spl_value = models.FloatField()
     measurement_duration = models.DurationField(default=0)
+    start_time = models.DateTimeField(default=None)
+    end_time = models.DateTimeField(default=None)
 
     def __str__(self):
         return self.device_id

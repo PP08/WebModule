@@ -1,0 +1,29 @@
+{% verbatim %}
+<script id="modal-template" type="text/template">
+    <div class="modal fade" role="dialog" id="myModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    {{#each objects}}
+                        <div id="details-measurement">
+                            <p><strong>Average sound pressure level:</strong> {{ [0].fields.average_spl_value }} dB</p>
+                            <p><strong>Duration measurement:</strong> {{ [0].fields.measurement_duration }}</p>
+                            <p><strong>Device ID:</strong> {{ [0].fields.device_id }}</p>
+                            <button class="btn btn-default">Graphs</button>
+                            <div class="page-header"></div>
+                        </div>
+                    {{/each}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</script>
+{% endverbatim %}

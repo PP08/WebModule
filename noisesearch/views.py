@@ -2,47 +2,67 @@ from django.shortcuts import render, get_object_or_404
 from .forms import DocumentForm_Single, DocumentForm_Multiple
 from django.views.decorators.csrf import csrf_exempt
 from .handleUploadedFile import handle_uploaded_file
-from .models import Sum_measurement_single
+from .models import Sum_measurement_single, Table_single
 from django.core import serializers
 import json
-from django.http import HttpResponse
+from django.http import JsonResponse, HttpResponse
+from . import coordinates_helper
+
+import itertools
 
 # Create your views here.
 
 def home_page(request):
-    objects = Sum_measurement_single.objects.all()
-    json_data = serializers.serialize("json", objects)
+    global average_longitude, average_latitude, average_spl_value, ids
 
-    tobjects = json.loads(json_data)
-    print('-' * 50)
-    print(tobjects)
-    print(len(tobjects))
-    k = 0
-    cells = []
+    objects = serializers.serialize("json", Sum_measurement_single.objects.all())
 
-    del tobjects[0]
-    print('-' * 50)
-    print(len(tobjects))
+    print(Sum_measurement_single.objects.all())
+    print(objects)
 
-    print(tobjects[0]['fields']['latitude'])
+    tobjects = json.loads(objects)
 
-    while(len(tobjects) != 0):
-        cell = []
+    data = []
+    while(len(tobjects) > 0):
+
+        list_row = []
+        remove_id = []
         x0 = tobjects[0]['fields']['latitude']
         y0 = tobjects[0]['fields']['longitude']
+        list_row.append(tobjects[0])
         del tobjects[0]
 
-        for object in tobjects:
-            x1 = object['fields']['latitude']
-            y1 = object['fields']['longitude']
-            if  pow((x1 - x0), 2) + pow((y1 - y0), 2) < 10:
-                cell.append(object)
-                del object
-                
-        cells.append(cell)
-    print('-' * 50)
-    print(len(cells))
+        if len(tobjects) > 0:
+            for i in range(0, len(tobjects)):
+                x1 = tobjects[i]['fields']['latitude']
+                y1 = tobjects[i]['fields']['longitude']
 
+                if coordinates_helper.haversine(x0, y0, x1, y1) < 30:
+                    list_row.append(tobjects[i])
+                    remove_id.append(i)
+
+            if len(remove_id) > 0:
+                tobjects = coordinates_helper.detele_element(tobjects, remove_id)
+
+            ids = []
+            sum_spl = sum_latitude = sum_longitude = 0
+
+            for element in list_row:
+                ids.append(element['pk'])
+                sum_spl = sum_spl + element['fields']['average_spl_value']
+                sum_latitude = sum_latitude + element['fields']['latitude']
+                sum_longitude = sum_longitude + element['fields']['longitude']
+
+            average_spl_value = round(sum_spl / len(list_row), 2)
+            average_latitude = sum_latitude / len(list_row)
+            average_longitude = sum_longitude / len(list_row)
+            data.append({'ids': ids, 'average_spl_value': average_spl_value, 'latitude': average_latitude, 'longitude': average_longitude})
+
+
+    # print(data)
+    json_data = json.dumps(data)
+
+    # print(json_data)
     return render(request, 'noisesearch/home.html', {'points': json_data})
 
 @csrf_exempt
@@ -59,8 +79,19 @@ def model_form_single(request):
         return render(request, 'noisesearch/form_single.html', {'form_single': form_single, })
 
 
-def test_ajax(request):
-    print(request)
-    if  request.POST:
-        print(request.POST)
-    return HttpResponse('success')
+def get_details(request):
+
+    indices = request.GET.getlist('ids[]')
+    data = []
+    for id in indices:
+        data.append(serializers.serialize('json', Sum_measurement_single.objects.filter(measurement_id=int(id))))
+
+    returnString = ""
+    for element in data:
+        returnString = returnString + element + ', '
+
+
+    returnString = returnString[:-2]
+    return HttpResponse(
+        returnString,
+        content_type="application/text")

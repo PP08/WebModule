@@ -21,19 +21,26 @@ def handle_uploaded_file(file_name):
     measurement_duration = end_time - start_time
     device_id = file['Device ID'][0]
 
-    table_average_single = Sum_measurement_single(device_id=device_id, latitude=latitude, longitude=longitude, average_spl_value=average_spl_value, measurement_duration=measurement_duration)
+    table_average_single = Sum_measurement_single(device_id=device_id, latitude=latitude, longitude=longitude,
+                                                  average_spl_value=average_spl_value, measurement_duration=measurement_duration,
+                                                  start_time=start_time, end_time=end_time)
     table_average_single.save()
-
     measurement_id = table_average_single.measurement_id
 
     cr = csv.reader(open(file_path, 'rt'))
-    next(cr)
-    for row in cr:
-        moment = datetime.strptime(row[1], time_format)
-        spl_value = float(row[2])
-        table_single = Table_single(device_id=device_id, latitude=latitude, longitude=longitude, spl_value=spl_value, measured_at=moment, measurement_id_id=measurement_id)
+    # next(cr)
+    # for row in cr:
+    #     moment = datetime.strptime(row[1], time_format)
+    #     spl_value = float(row[2])
+    #     table_single = Table_single(device_id=device_id, latitude=latitude, longitude=longitude,
+    #                                 spl_value=spl_value, measured_at=moment, measurement_id_id=measurement_id)
+    #     table_single.save()
+
+    for i in range(len(file)):
+        moment = datetime.strptime(file['Timestamp'][i], time_format)
+        spl_value = float(file['Pressure'][i])
+        table_single = Table_single(device_id=device_id, latitude=latitude, longitude=longitude,
+                                    spl_value=spl_value, measured_at=moment, measurement_id_id=measurement_id)
+
         table_single.save()
-
-
-
 
