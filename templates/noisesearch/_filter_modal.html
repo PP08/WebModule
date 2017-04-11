@@ -1,0 +1,98 @@
+{#    test modal#}
+<!-- Modal Structure -->
+<div id="modal1" class="modal bottom-sheet">
+    <div class="modal-content container">
+
+        <h5>Filters</h5>
+
+        <form action="#">
+            <div class="row">
+                <div class="col s4">
+                    <p>
+                        <input type="checkbox" id="chx_duration"/>
+                        <label for="chx_duration">Duration</label>
+                    </p>
+                </div>
+
+                <div class="col s4">
+                   <div class="row">
+                       <div class="col s5"><p>From</p></div>
+                       <div class="col s5"><input type="number" min="0"></div>
+                   </div>
+                </div>
+
+                <div class="col s4">
+                   <div class="row">
+                       <div class="col s5"><p>To</p></div>
+                       <div class="col s5"><input type="number" min="0"></div>
+                   </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col s4">
+                    <p>
+                        <input type="checkbox" id="chx_spl_value"/>
+                        <label for="chx_spl_value">SPL value</label>
+                    </p>
+                </div>
+
+                <div class="col s4">
+                    <div class="row">
+                       <div class="col s5"><p>From</p></div>
+                       <div class="col s5"><input type="number" min="0"></div>
+                   </div>
+                </div>
+
+                <div class="col s4">
+                    <div class="row">
+                       <div class="col s5"><p>To</p></div>
+                       <div class="col s5"><input type="number" min="0"></div>
+                   </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s4">
+                    <p>
+                        <input type="checkbox" id="chx_date"/>
+                        <label for="chx_date">Date</label>
+                    </p>
+                </div>
+
+                <div class="col s4">
+                    <div class="row">
+                       <div class="col s5"><p>From</p></div>
+                       <div class="col s5"><input type="date" class="datepicker"></div>
+                   </div>
+                </div>
+
+                <div class="col s4">
+                    <div class="row">
+                       <div class="col s5"><p>To</p></div>
+                       <div class="col s5"><input type="date" class="datepicker"></div>
+                   </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col s4">
+                    <p>
+                        <input type="checkbox" id="chx_time"/>
+                        <label for="chx_time">Time</label>
+                    </p>
+                </div>
+
+                <div class="col s4">
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+      <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Apply changes</a>
+    </div>
+</div>

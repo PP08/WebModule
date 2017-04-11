@@ -8,7 +8,30 @@
 
 }
 
+
+
 #mapid {
     width: 100%;
     height: 100%;
+}
+
+#filter-form {
+    /*background: red;*/
+}
+
+#btn-apply {
+    background: yellow;
+}
+
+.picker--opened .picker__frame {
+    top: 40% !important;
+}
+
+.modal.bottom-sheet {
+    max-height: 65% !important;
+    height: 65% !important;
+}
+
+.picker__date-display {
+    display: none !important;
 }

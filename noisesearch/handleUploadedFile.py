@@ -27,7 +27,7 @@ def handle_uploaded_file(file_name):
     table_average_single.save()
     measurement_id = table_average_single.measurement_id
 
-    cr = csv.reader(open(file_path, 'rt'))
+    # cr = csv.reader(open(file_path, 'rt'))
     # next(cr)
     # for row in cr:
     #     moment = datetime.strptime(row[1], time_format)
@@ -41,6 +41,5 @@ def handle_uploaded_file(file_name):
         spl_value = float(file['Pressure'][i])
         table_single = Table_single(device_id=device_id, latitude=latitude, longitude=longitude,
                                     spl_value=spl_value, measured_at=moment, measurement_id_id=measurement_id)
-
         table_single.save()
 
