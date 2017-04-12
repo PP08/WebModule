@@ -19,6 +19,25 @@
         <title>Noise Search</title>
     </head>
     <body>
+        <nav>
+            <div class="nav-wrapper">
+                <a href="{% url 'home' %}" class="brand-logo">Noise Search</a>
+                <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li class="active"><a href="{% url 'home' %}">Single Point</a></li>
+                    <li><a href="#">Multiple Points</a></li>
+                    <li><a href="{% url 'upload_single' %}">Test Form</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+                <ul class="side-nav" id="mobile-demo">
+                    <li class="active"><a href="{% url 'home' %}">Single Point</a></li>
+                    <li><a href="#">Multiple Points</a></li>
+                    <li><a href="{% url 'upload_single' %}">Test Form</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+            </div>
+        </nav>
+
         {% include 'noisesearch/_modal.html' %}
         <div class="content">
             {% block content %}
@@ -27,12 +46,19 @@
 
         <div class="footer">
 
-            <script src="{% static 'js/handlebars.js' %}"></script>
-            {#    <!-- Compiled and minified JavaScript -->#}
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
-            {% block script %}
-            {% endblock %}
         </div>
 
+
+        <script src="{% static 'js/handlebars.js' %}"></script>
+        {#    <!-- Compiled and minified JavaScript -->#}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+        <script src="{% static 'js/filter_request.js' %}"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".button-collapse").sideNav();
+            });
+        </script>
+        {% block script %}
+        {% endblock %}
     </body>
 </html>

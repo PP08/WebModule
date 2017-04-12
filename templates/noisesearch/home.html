@@ -1,4 +1,5 @@
 {% extends 'noisesearch/base.html' %}
+{% load static %}
 
 {% block header %}
 
@@ -10,15 +11,12 @@
 
 {% block content %}
     <div id="mapid"></div>
-    <!-- definition of the word -->
-    <div id="test-modal"></div>
-{#   html template modal#}
-{#    {% include 'noisesearch/_modal.html' %}#}
 
+    <div id="modal"></div>
 
 {#    floating buttons#}
     <div class="fixed-action-btn horizontal">
-        <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modal1">
+        <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modal-filter">
             <i class="material-icons">menu</i>
         </a>
     </div>
@@ -38,10 +36,7 @@
             });
         });
 
-
-
-
-        ////map
+{#        map#}
         var mymap = L.map('mapid').setView([48.72305363, 44.53600696], 13);
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibGFuY2Vsb2Z0MTAwOCIsImEiOiJjajE4OXExcWkwMDRyMzJwcDNsdDIzMzU4In0.1JIG2H6f-CZ572Wmzxm77g', {
             maxZoom: 18,
@@ -52,7 +47,6 @@
         }).addTo(mymap);
 
         var points = {{ points|safe }};
-
         for (var i = 0; i < points.length; i++){
             var latitude = points[i].latitude;
             var longitude = points[i].longitude;
@@ -61,12 +55,9 @@
             marker.bindPopup('<b>SPL value:</b> ' + splvalue.toString() + '<strong> dB</strong><br><br> ' +
                 'Calculated from ' + points[i].ids.length.toString() + ' measurement(s)<br><br>' +
                 '<button type="button" class="btn btn-default" id="' + i.toString() + '" onClick="myFunction(this.id)">Details</button>');
-{#            marker.bindPopup('<b>SPL value:</b><br>' + splvalue.toString() + '<strong> dB</strong><br><br><button type="button" class="btn btn-default btn-details"' + 'id="' + i.toString() + '">Details</button>');#}
         }
 
         function myFunction(clicked_id) {
-
-            {#            alert('measurements id: ' + points[id].ids.toString());#}
             $.ajax({
                 url: '/get_details/',
                 data: {
@@ -81,15 +72,15 @@
 
                         var jsonData = JSON.parse(string_data);
                         console.log(jsonData);
-{#                        alert(jsonData[0][0]['fields'].measurement_duration);#}
 
-                        var myModal = document.getElementById('test-modal');
+                        var myModal = document.getElementById('modal');
                         var modal_template = Handlebars.compile(document.getElementById('modal-template').innerHTML);
 
                         var context = {objects : jsonData};
                         myModal.innerHTML = modal_template(context);
-                        $('#myModal').modal('show');
 
+                        $('.modal').modal();
+                        $('#modal-detail').modal('open');
                     }
                 }
             });

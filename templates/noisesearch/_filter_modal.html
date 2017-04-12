@@ -1,11 +1,9 @@
 {#    test modal#}
 <!-- Modal Structure -->
-<div id="modal1" class="modal bottom-sheet">
+<div id="modal-filter" class="modal bottom-sheet">
     <div class="modal-content container">
-
         <h5>Filters</h5>
-
-        <form action="#">
+        <form action="#" id="details-form">
             <div class="row">
                 <div class="col s4">
                     <p>
@@ -13,19 +11,20 @@
                         <label for="chx_duration">Duration</label>
                     </p>
                 </div>
+                <div id="duration_values">
+                    <div class="col s4">
+                        <div class="input-field inline">
+                            <input id="spin_time_min" type="number" class="validate" min="0" disabled="disabled">
+                            <label for="spin_time_min" data-error="wrong" data-success="right">From</label>
+                        </div>
+                    </div>
 
-                <div class="col s4">
-                   <div class="row">
-                       <div class="col s5"><p>From</p></div>
-                       <div class="col s5"><input type="number" min="0"></div>
-                   </div>
-                </div>
-
-                <div class="col s4">
-                   <div class="row">
-                       <div class="col s5"><p>To</p></div>
-                       <div class="col s5"><input type="number" min="0"></div>
-                   </div>
+                    <div class="col s4">
+                        <div class="input-field inline">
+                            <input id="spin_time_max" type="number" class="validate" min="0" disabled="disabled">
+                            <label for="spin_time_max" data-error="wrong" data-success="right">To</label>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -37,44 +36,46 @@
                         <label for="chx_spl_value">SPL value</label>
                     </p>
                 </div>
+                <div id="spl_values">
+                    <div class="col s4">
+                        <div class="input-field inline">
+                            <input id="spin_spl_min" type="number" class="validate" min="0" disabled="disabled">
+                            <label for="spin_spl_min" data-error="wrong" data-success="right">From</label>
+                        </div>
+                    </div>
 
-                <div class="col s4">
-                    <div class="row">
-                       <div class="col s5"><p>From</p></div>
-                       <div class="col s5"><input type="number" min="0"></div>
-                   </div>
+                    <div class="col s4">
+                        <div class="input-field inline">
+                            <input id="spin_spl_max" type="number" class="validate" min="0" disabled="disabled">
+                            <label for="spin_spl_max" data-error="wrong" data-success="right">To</label>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="col s4">
-                    <div class="row">
-                       <div class="col s5"><p>To</p></div>
-                       <div class="col s5"><input type="number" min="0"></div>
-                   </div>
-                </div>
             </div>
 
             <div class="row">
                 <div class="col s4">
                     <p>
-                        <input type="checkbox" id="chx_date"/>
+                        <input type="checkbox" id="chx_date">
                         <label for="chx_date">Date</label>
                     </p>
                 </div>
+                <div id="date_values">
+                    <div class="col s4">
+                        <div class="input-field inline">
+                            <input id="pick_date_min" type="date" class="validate datepicker" disabled="disabled">
+                            <label for="pick_date_min" data-error="wrong" data-success="right">From</label>
+                        </div>
+                    </div>
 
-                <div class="col s4">
-                    <div class="row">
-                       <div class="col s5"><p>From</p></div>
-                       <div class="col s5"><input type="date" class="datepicker"></div>
-                   </div>
+                    <div class="col s4">
+                        <div class="input-field inline">
+                            <input id="pick_date_max" type="date" class="validate datepicker" disabled="disabled">
+                            <label for="pick_date_max" data-error="wrong" data-success="right">To</label>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="col s4">
-                    <div class="row">
-                       <div class="col s5"><p>To</p></div>
-                       <div class="col s5"><input type="date" class="datepicker"></div>
-                   </div>
-                </div>
-
             </div>
 
             <div class="row">
@@ -84,15 +85,27 @@
                         <label for="chx_time">Time</label>
                     </p>
                 </div>
+                <div id="time_values">
+                    <div class="col s4">
+                        <div class="input-field inline">
+                            <input id="pick_time_min" type="time" class="validate" disabled="disabled">
+                            <label for="pick_time_min" data-error="wrong" data-success="right"
+                                   disabled="disabled">From</label>
+                        </div>
+                    </div>
 
-                <div class="col s4">
-
+                    <div class="col s4">
+                        <div class="input-field inline">
+                            <input id="pick_time_max" type="time" class="validate" disabled="disabled">
+                            <label for="pick_time_max" data-error="wrong" data-success="right"
+                                   disabled="disabled">To</label>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="row centered">
+                <button class=" waves-effect waves-green btn-flat disabled" id="btn-apply" type="submit">Apply changes</button>
+            </div>
         </form>
-    </div>
-
-    <div class="modal-footer">
-      <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Apply changes</a>
     </div>
 </div>
