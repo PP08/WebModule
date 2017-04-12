@@ -7,5 +7,27 @@
             {{ form_single.as_p }}
             <button type="submit" class="btn btn-primary"> Upload </button>
         </form>
+
+
+
+        <h5>Test serialize form</h5>
+
+        <form action="#" id="test-form">
+            <p>
+                <input type="text" id="email" name="email">
+                <label for="email">Email</label>
+            </p>
+
+            <p>
+                <input type="text" id="name" name="username">
+                <label for="name">User name</label>
+            </p>
+
+            <button type="submit" class="btn">Send</button>
+        </form>
     </div>
+
+
+
+
 {% endblock %}

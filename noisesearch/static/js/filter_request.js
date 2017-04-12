@@ -52,20 +52,66 @@ $(document).ready(function () {
         $("#btn-apply").removeClass("disabled");
     });
 
+    //
+    // $("#btn-apply").click(function () {
+    //     $('.modal').modal();
+    //     $('#modal-filter').modal('close');
+    //     $(this).addClass("disabled");
+    //     // console.log($('#details-form').serialize());
+    //
+    // });
+    function raise_toast(array) {
+        for (var i = 0; i < array.length; i++){
+            // console.log(formArray[i].value);
+            if (array[i].value == ""){
+                Materialize.toast(array[i].name + ' is empty', 4000)
+            }
+        }
+    }
 
-    $("#btn-apply").click(function () {
-        $('.modal').modal();
-        $('#modal-filter').modal('close');
-        $(this).addClass("disabled");
-        // console.log($('#details-form').serialize());
+    function validate(array) {
+        for (var i = 0; i < array.length; i++){
+            if (array[i].value == ""){
+                return false;
+            }
+        }
+        return true;
+    }
 
+
+    $("form#filter-form").submit(function () {
+        event.preventDefault();
+        var filterArray = $(this).serializeArray();
+
+        raise_toast(filterArray);
+
+        if (validate(filterArray)){
+            $("#btn-apply").addClass("disabled");
+            $('.modal').modal();
+            $('#modal-filter').modal('close');
+        }
+
+        console.log("form has submitted");
+        console.log($('#filter-form').serializeArray());
     });
 
-    // $("form#details-form").submit(function () {
-    //
-    //     $("#btn-apply").addClass("disabled");
-    //
-    //     // TODO: get the data of the form
-    // });
+
+
+    $("form#test-form").on('submit',function (event) {
+
+        event.preventDefault();
+        console.log("submitted");
+        console.log($(this).serializeArray());
+
+        var formArray = $(this).serializeArray();
+
+        for (var i = 0; i < formArray.length; i++){
+            // console.log(formArray[i].value);
+            if (formArray[i].value == ""){
+                Materialize.toast(formArray[i].name + ' is empty', 4000)
+            }
+        }
+
+    });
 
 });
