@@ -52,16 +52,6 @@ $(document).ready(function () {
         $("#btn-apply").removeClass("disabled");
     });
 
-
-    // function raise_toast(array) {
-    //     for (var i = 0; i < array.length; i++){
-    //         // console.log(formArray[i].value);
-    //         if (array[i].value == ""){
-    //             Materialize.toast(array[i].name + ' is empty', 4000)
-    //         }
-    //     }
-    // }
-
     function validate(array) {
         for (var i = 0; i < array.length; i++) {
             if (array[i].value == "") {
@@ -84,8 +74,8 @@ $(document).ready(function () {
             $('#modal-filter').modal('close');
 
             console.log(filterArray);
-
             filtersJson = JSON.stringify(filterArray);
+            console.log('filter array: ', filterArray.length);
             get_data(filtersJson);
         }
     });
@@ -100,11 +90,14 @@ $(document).ready(function () {
 
             success: function (data) {
                 console.log("success");
-                console.log(data);
+                console.log('filtered: ', data);
+                markers.clearLayers();
+                if (data)
+                g_points = data;
+                addMarkers(data)
             }
         });
     }
-
 
     $("form#test-form").on('submit', function (event) {
 

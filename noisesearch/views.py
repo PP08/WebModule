@@ -10,6 +10,7 @@ from . import coordinates_helper
 from datetime import timedelta
 import itertools
 
+
 # Create your views here.
 
 def home_page(request):
@@ -20,50 +21,19 @@ def home_page(request):
     # print(Sum_measurement_single.objects.all())
     # print(objects)
 
+    # TODO: group the points
+
+
+
     tobjects = json.loads(objects)
 
-    data = []
-    while(len(tobjects) > 0):
-
-        list_row = []
-        remove_id = []
-        x0 = tobjects[0]['fields']['latitude']
-        y0 = tobjects[0]['fields']['longitude']
-        list_row.append(tobjects[0])
-        del tobjects[0]
-
-        if len(tobjects) > 0:
-            for i in range(0, len(tobjects)):
-                x1 = tobjects[i]['fields']['latitude']
-                y1 = tobjects[i]['fields']['longitude']
-
-                if coordinates_helper.haversine(x0, y0, x1, y1) < 30:
-                    list_row.append(tobjects[i])
-                    remove_id.append(i)
-
-            if len(remove_id) > 0:
-                tobjects = coordinates_helper.detele_element(tobjects, remove_id)
-
-            ids = []
-            sum_spl = sum_latitude = sum_longitude = 0
-
-            for element in list_row:
-                ids.append(element['pk'])
-                sum_spl = sum_spl + element['fields']['average_spl_value']
-                sum_latitude = sum_latitude + element['fields']['latitude']
-                sum_longitude = sum_longitude + element['fields']['longitude']
-
-            average_spl_value = round(sum_spl / len(list_row), 2)
-            average_latitude = sum_latitude / len(list_row)
-            average_longitude = sum_longitude / len(list_row)
-            data.append({'ids': ids, 'average_spl_value': average_spl_value, 'latitude': average_latitude, 'longitude': average_longitude})
-
-
+    data = coordinates_helper.group_the_points(tobjects)
     # print(data)
     json_data = json.dumps(data)
 
     # print(json_data)
     return render(request, 'noisesearch/home.html', {'points': json_data})
+
 
 @csrf_exempt
 def model_form_single(request):
@@ -80,7 +50,6 @@ def model_form_single(request):
 
 
 def get_details(request):
-
     indices = request.GET.getlist('ids[]')
     data = []
     for id in indices:
@@ -90,15 +59,14 @@ def get_details(request):
     for element in data:
         returnString = returnString + element + ', '
 
-
     returnString = returnString[:-2]
     return HttpResponse(
         returnString,
         content_type="application/text")
 
+
 @csrf_exempt
 def data_filter(request):
-
     # max_duration, min_spl, max_spl, max_date, min_date, objects = None
     min_duration = None
     max_duration = None
@@ -114,9 +82,9 @@ def data_filter(request):
     # print(filters)
 
     for f in filters:
-        if  f['name'] == 'min_duration':
+        if f['name'] == 'min_duration':
             min_duration = f['value']
-        elif  f['name'] == 'max_duration':
+        elif f['name'] == 'max_duration':
             max_duration = f['value']
         elif f['name'] == 'min_spl':
             min_spl = f['value']
@@ -134,27 +102,28 @@ def data_filter(request):
         max_duration = timedelta(minutes=int(max_duration))
         objects = objects.filter(measurement_duration__gte=min_duration).filter(measurement_duration__lte=max_duration)
 
-    if(min_spl != None):
-        objects = objects.filter(average_spl_value__gte= int(min_spl)).filter(average_spl_value__lte= int(max_spl))
+    if (min_spl != None):
+        objects = objects.filter(average_spl_value__gte=int(min_spl)).filter(average_spl_value__lte=int(max_spl))
 
-    if(min_date != None):
+    if (min_date != None):
         min_date = coordinates_helper.convert_date_time(min_date)
         max_date = coordinates_helper.convert_date_time(max_date)
 
         objects = objects.filter(start_time__gte=min_date).filter(start_time__lte=max_date)
 
-    if (min_duration == None) & (min_spl == None) & (min_date == None):
-        objects = None
-
     context = {'key': 'value'}
     # print(objects)
     if (objects != None):
-        return_data = serializers.serialize("json", objects)
+
+        objects = serializers.serialize('json', objects)
+        tobjects = json.loads(objects)
+        data = coordinates_helper.group_the_points(tobjects)
+        print(data)
+        return_data = json.dumps(data)
     else:
         return_data = json.loads(context)
-    # 13 April, 2017
 
-
+    print(return_data)
 
     return HttpResponse(
         return_data,
