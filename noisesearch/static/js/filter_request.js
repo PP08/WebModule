@@ -52,52 +52,61 @@ $(document).ready(function () {
         $("#btn-apply").removeClass("disabled");
     });
 
-    //
-    // $("#btn-apply").click(function () {
-    //     $('.modal').modal();
-    //     $('#modal-filter').modal('close');
-    //     $(this).addClass("disabled");
-    //     // console.log($('#details-form').serialize());
-    //
-    // });
-    function raise_toast(array) {
-        for (var i = 0; i < array.length; i++){
-            // console.log(formArray[i].value);
-            if (array[i].value == ""){
-                Materialize.toast(array[i].name + ' is empty', 4000)
-            }
-        }
-    }
+
+    // function raise_toast(array) {
+    //     for (var i = 0; i < array.length; i++){
+    //         // console.log(formArray[i].value);
+    //         if (array[i].value == ""){
+    //             Materialize.toast(array[i].name + ' is empty', 4000)
+    //         }
+    //     }
+    // }
 
     function validate(array) {
-        for (var i = 0; i < array.length; i++){
-            if (array[i].value == ""){
+        for (var i = 0; i < array.length; i++) {
+            if (array[i].value == "") {
+                Materialize.toast('Empty input', 3000)
                 return false;
             }
         }
         return true;
     }
 
-
     $("form#filter-form").submit(function () {
         event.preventDefault();
         var filterArray = $(this).serializeArray();
 
-        raise_toast(filterArray);
+        // raise_toast(filterArray);
 
-        if (validate(filterArray)){
+        if (validate(filterArray)) {
             $("#btn-apply").addClass("disabled");
             $('.modal').modal();
             $('#modal-filter').modal('close');
-        }
 
-        console.log("form has submitted");
-        console.log($('#filter-form').serializeArray());
+            console.log(filterArray);
+
+            filtersJson = JSON.stringify(filterArray);
+            get_data(filtersJson);
+        }
     });
 
+    function get_data(array) {
+        console.log(array);
+        $.ajax({
+
+            url: /data_filter/,
+            type: 'POST',
+            data: {'filters': array},
+
+            success: function (data) {
+                console.log("success");
+                console.log(data);
+            }
+        });
+    }
 
 
-    $("form#test-form").on('submit',function (event) {
+    $("form#test-form").on('submit', function (event) {
 
         event.preventDefault();
         console.log("submitted");
@@ -105,9 +114,9 @@ $(document).ready(function () {
 
         var formArray = $(this).serializeArray();
 
-        for (var i = 0; i < formArray.length; i++){
+        for (var i = 0; i < formArray.length; i++) {
             // console.log(formArray[i].value);
-            if (formArray[i].value == ""){
+            if (formArray[i].value == "") {
                 Materialize.toast(formArray[i].name + ' is empty', 4000)
             }
         }

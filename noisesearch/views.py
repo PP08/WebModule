@@ -7,7 +7,7 @@ from django.core import serializers
 import json
 from django.http import JsonResponse, HttpResponse
 from . import coordinates_helper
-
+from datetime import timedelta
 import itertools
 
 # Create your views here.
@@ -17,8 +17,8 @@ def home_page(request):
 
     objects = serializers.serialize("json", Sum_measurement_single.objects.all())
 
-    print(Sum_measurement_single.objects.all())
-    print(objects)
+    # print(Sum_measurement_single.objects.all())
+    # print(objects)
 
     tobjects = json.loads(objects)
 
@@ -95,3 +95,68 @@ def get_details(request):
     return HttpResponse(
         returnString,
         content_type="application/text")
+
+@csrf_exempt
+def data_filter(request):
+
+    # max_duration, min_spl, max_spl, max_date, min_date, objects = None
+    min_duration = None
+    max_duration = None
+    min_spl = None
+    max_spl = None
+    min_date = None
+    max_date = None
+    global objects
+
+    filters = request.POST.get('filters')
+    filters = json.loads(filters)
+
+    # print(filters)
+
+    for f in filters:
+        if  f['name'] == 'min_duration':
+            min_duration = f['value']
+        elif  f['name'] == 'max_duration':
+            max_duration = f['value']
+        elif f['name'] == 'min_spl':
+            min_spl = f['value']
+        elif f['name'] == 'max_spl':
+            max_spl = f['value']
+        elif f['name'] == 'min_date':
+            min_date = f['value']
+        elif f['name'] == 'max_date':
+            max_date = f['value']
+
+    objects = Sum_measurement_single.objects.all()
+
+    if min_duration != None:
+        min_duration = timedelta(minutes=int(min_duration))
+        max_duration = timedelta(minutes=int(max_duration))
+        objects = objects.filter(measurement_duration__gte=min_duration).filter(measurement_duration__lte=max_duration)
+
+    if(min_spl != None):
+        objects = objects.filter(average_spl_value__gte= int(min_spl)).filter(average_spl_value__lte= int(max_spl))
+
+    if(min_date != None):
+        min_date = coordinates_helper.convert_date_time(min_date)
+        max_date = coordinates_helper.convert_date_time(max_date)
+
+        objects = objects.filter(start_time__gte=min_date).filter(start_time__lte=max_date)
+
+    if (min_duration == None) & (min_spl == None) & (min_date == None):
+        objects = None
+
+    context = {'key': 'value'}
+    # print(objects)
+    if (objects != None):
+        return_data = serializers.serialize("json", objects)
+    else:
+        return_data = json.loads(context)
+    # 13 April, 2017
+
+
+
+    return HttpResponse(
+        return_data,
+        content_type="application/json"
+    )

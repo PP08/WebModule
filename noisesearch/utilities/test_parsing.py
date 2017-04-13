@@ -58,3 +58,21 @@ if __name__ == '__main__':
 
     print(list_test[0])
 
+    input_string = '13 April, 2017'
+
+    input_string = input_string.replace(',', '')
+
+    date_array = input_string.split(' ')
+
+    date_array = date_array[::-1]
+
+    date_array = '-'.join(date_array) + ' 00:00:00'
+
+    print(datetime.strptime(date_array, '%Y-%B-%d %H:%M:%S'))
+
+
+    # print(date_array)
+
+    mydate = datetime.now()
+    # print (mydate.strftime("%B"))
+

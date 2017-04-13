@@ -1,5 +1,7 @@
 from math import radians, sin, cos, sqrt, asin
 
+from datetime import datetime
+
 def haversine(lat1, lon1, lat2, lon2):
     R = 6372.8  # Earth radius in kilometers
 
@@ -22,5 +24,17 @@ def detele_element(list, ids):
         list.remove(value)
 
     return list
+
+def convert_date_time(input_string):
+
+    input_string = input_string.replace(',', '')
+
+    date_array = input_string.split(' ')
+
+    date_array = date_array[::-1]
+
+    date_array = '-'.join(date_array) + ' 00:00:00'
+
+    return (datetime.strptime(date_array, '%Y-%B-%d %H:%M:%S'))
 
 

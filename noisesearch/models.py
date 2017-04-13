@@ -1,5 +1,5 @@
 from django.db import models
-import datetime
+from datetime import timedelta
 
 # Create your models here.
 class Document_Single(models.Model):
@@ -23,7 +23,7 @@ class Sum_measurement_single(models.Model):
     end_time = models.DateTimeField(default=None)
 
     def __str__(self):
-        return self.device_id
+        return str(self.measurement_duration)
 
     class Meta:
         db_table = "average_single"
