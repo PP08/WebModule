@@ -28,3 +28,8 @@
 .side-nav {
     z-index: 1010 !important;
 }
+
+.center-div {
+    text-align: center;
+    margin: auto;
+}

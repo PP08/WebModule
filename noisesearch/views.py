@@ -1,14 +1,17 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .forms import DocumentForm_Single, DocumentForm_Multiple
 from django.views.decorators.csrf import csrf_exempt
 from .handleUploadedFile import handle_uploaded_file
 from .models import Sum_measurement_single, Table_single
 from django.core import serializers
 import json
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse
 from . import coordinates_helper
 from datetime import timedelta
-import itertools
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
+
 
 
 # Create your views here.
@@ -17,13 +20,6 @@ def home_page(request):
     global average_longitude, average_latitude, average_spl_value, ids
 
     objects = serializers.serialize("json", Sum_measurement_single.objects.all())
-
-    # print(Sum_measurement_single.objects.all())
-    # print(objects)
-
-    # TODO: group the points
-
-
 
     tobjects = json.loads(objects)
 
@@ -111,21 +107,43 @@ def data_filter(request):
 
         objects = objects.filter(start_time__gte=min_date).filter(start_time__lte=max_date)
 
-    context = {'key': 'value'}
-    # print(objects)
-    if (objects != None):
+    context = {"message": "No objects match your filter(s)"}
 
+    if (len(objects) > 0):
         objects = serializers.serialize('json', objects)
         tobjects = json.loads(objects)
         data = coordinates_helper.group_the_points(tobjects)
-        print(data)
         return_data = json.dumps(data)
     else:
-        return_data = json.loads(context)
+        return_data = json.dumps(context)
 
-    print(return_data)
+    # todo: return data when get null objects
 
     return HttpResponse(
         return_data,
         content_type="application/json"
     )
+
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'noisesearch/signup.html', {'form': form})
+
+
+@login_required
+def data_manager(request):
+    current_user = request.user
+
+    print(current_user.id)
+    return render(request, 'noisesearch/user_data.html')

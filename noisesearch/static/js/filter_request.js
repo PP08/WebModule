@@ -3,14 +3,11 @@
  */
 
 $(document).ready(function () {
-
     $("#chx_duration").change(function () {
         var $checkbox = $(this);
         if ($checkbox.prop('checked')) {
-            console.log('checked');
             $("#duration_values :input").attr("disabled", false);
         } else {
-            console.log('unchecked');
             $("#duration_values :input").attr("disabled", true);
         }
     });
@@ -18,10 +15,8 @@ $(document).ready(function () {
     $("#chx_spl_value").change(function () {
         var $checkbox = $(this);
         if ($checkbox.prop('checked')) {
-            console.log('checked');
             $("#spl_values :input").attr("disabled", false);
         } else {
-            console.log('unchecked');
             $("#spl_values :input").attr("disabled", true);
         }
     });
@@ -29,10 +24,8 @@ $(document).ready(function () {
     $("#chx_date").change(function () {
         var $checkbox = $(this);
         if ($checkbox.prop('checked')) {
-            console.log('checked');
             $("#date_values :input").attr("disabled", false);
         } else {
-            console.log('unchecked');
             $("#date_values :input").attr("disabled", true);
         }
     });
@@ -40,10 +33,8 @@ $(document).ready(function () {
     $("#chx_time").change(function () {
         var $checkbox = $(this);
         if ($checkbox.prop('checked')) {
-            console.log('checked');
             $("#time_values :input").attr("disabled", false);
         } else {
-            console.log('unchecked');
             $("#time_values :input").attr("disabled", true);
         }
     });
@@ -65,7 +56,6 @@ $(document).ready(function () {
     $("form#filter-form").submit(function () {
         event.preventDefault();
         var filterArray = $(this).serializeArray();
-
         // raise_toast(filterArray);
 
         if (validate(filterArray)) {
@@ -73,15 +63,16 @@ $(document).ready(function () {
             $('.modal').modal();
             $('#modal-filter').modal('close');
 
-            console.log(filterArray);
             filtersJson = JSON.stringify(filterArray);
-            console.log('filter array: ', filterArray.length);
+
+            // todo: handle form changes or not. + handle when receive null
+
             get_data(filtersJson);
+
         }
     });
 
     function get_data(array) {
-        console.log(array);
         $.ajax({
 
             url: /data_filter/,
@@ -89,31 +80,16 @@ $(document).ready(function () {
             data: {'filters': array},
 
             success: function (data) {
-                console.log("success");
-                console.log('filtered: ', data);
                 markers.clearLayers();
-                if (data)
-                g_points = data;
-                addMarkers(data)
+
+                if (data.length > 0) {
+                    g_points = data;
+                    addMarkers(data)
+                    Materialize.toast("Found " + data.length + " results" , 4000)
+                } else {
+                    Materialize.toast(data.message, 4000)
+                }
             }
         });
     }
-
-    $("form#test-form").on('submit', function (event) {
-
-        event.preventDefault();
-        console.log("submitted");
-        console.log($(this).serializeArray());
-
-        var formArray = $(this).serializeArray();
-
-        for (var i = 0; i < formArray.length; i++) {
-            // console.log(formArray[i].value);
-            if (formArray[i].value == "") {
-                Materialize.toast(formArray[i].name + ' is empty', 4000)
-            }
-        }
-
-    });
-
 });

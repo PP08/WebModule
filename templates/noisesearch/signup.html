@@ -1,0 +1,32 @@
+{% extends 'noisesearch/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h4 class="center-align">Sign up</h4>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="row">
+                    <div class="input-field col s6 offset-s3">
+                        <p>
+                            {{ field.label_tag }}<br>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <small style="color: grey">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <p style="color: red">{{ error }}</p>
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="center-div">
+                <button type="submit" class="btn">Sign up</button>
+            </div>
+
+        </form>
+
+    </div>
+
+{% endblock %}

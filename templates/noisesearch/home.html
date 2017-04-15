@@ -16,7 +16,7 @@
 
 {#    floating buttons#}
     <div class="fixed-action-btn horizontal">
-        <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" data-target="modal-filter">
+        <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" id="btn-filter-trigger">
             <i class="material-icons">menu</i>
         </a>
     </div>
@@ -31,6 +31,10 @@
         $(document).ready(function () {
             // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
             $('.modal').modal();
+
+            $('#btn-filter-trigger').click(function () {
+               $('#modal-filter').modal('open');
+            });
 
             $('.datepicker').pickadate({
                 selectMonths: true, // Creates a dropdown to control month

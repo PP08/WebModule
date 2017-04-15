@@ -19,18 +19,29 @@
         <title>Noise Search</title>
     </head>
     <body>
+
+        <!-- Dropdown Structure -->
+        <ul id="dropdown1" class="dropdown-content">
+            <li><a href="{% url 'data_manager' %}">Data Manager</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Profile</a></li>
+            <li class="divider"></li>
+            <li><a href="{% url 'logout' %}">Log out</a></li>
+        </ul>
+
         <nav>
             <div class="nav-wrapper">
                 <a href="{% url 'home' %}" class="brand-logo">Noise Search</a>
                 <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
-                    <li class="active"><a href="{% url 'home' %}">Single Point</a></li>
-                    <li><a href="#">Multiple Points</a></li>
-                    <li><a href="{% url 'upload_single' %}">Test Form</a></li>
-                    <li><a href="#">About</a></li>
+                    <li id="home-page"><a href="{% url 'home' %}">Single Point</a></li>
+                    <li id="multiple-page"><a href="#">Multiple Points</a></li>
+                    <li id="test-form-page"><a href="{% url 'upload_single' %}">Test Form</a></li>
+                    <li id="about-page"><a href="#">About</a></li>
+                    <li id="login-nav"><a href="{% url 'login' %}">Login</a></li>
                 </ul>
                 <ul class="side-nav" id="mobile-demo">
-                    <li class="active"><a href="{% url 'home' %}">Single Point</a></li>
+                    <li><a href="{% url 'home' %}">Single Point</a></li>
                     <li><a href="#">Multiple Points</a></li>
                     <li><a href="{% url 'upload_single' %}">Test Form</a></li>
                     <li><a href="#">About</a></li>
@@ -56,6 +67,22 @@
         <script type="text/javascript">
             $(document).ready(function () {
                 $(".button-collapse").sideNav();
+
+                var url = window.location;
+
+                $('li').removeClass('active');
+
+                $('a').filter(function () {
+                    return this.href == url;
+                }).parent().addClass('active');
+
+                var user_name = '{{ user.username }}';
+
+                if (user_name){
+                    document.getElementById('login-nav').innerHTML = '<li><a class="dropdown-button" href="#!" data-activates="dropdown1">' + user_name + '<i class="material-icons right">arrow_drop_down</i></a></li>';
+                }
+
+                $(".dropdown-button").dropdown();
             });
         </script>
     </body>
