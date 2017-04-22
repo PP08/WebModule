@@ -4,31 +4,34 @@
 
     <div class="container">
 
-        <h4 class="clear-fix2">Details of measurement</h4>
-
-        <table class="centered highlight">
-            <thead>
-            <tr>
-{#                <th>Device ID</th>#}
-                <th>Measured At</th>
-                <th>Sound Pressure Level</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            {% for row in measurement %}
+        <h4 class="clear-fix2 center-align">Details of the measurement</h4>
+        <div class="inner-table">
+            <table class="centered highlight">
+                <thead>
                 <tr>
-{#                    <td>{{ row.device_id }}</td>#}
-                    <td>{{ row.measured_at.ctime }}</td>
-                    <td>{{ row.spl_value }}</td>
-                    <td>{{ row.latitude }}</td>
-                    <td>{{ row.longitude }}</td>
+                    {#                <th>Device ID</th>#}
+                    <th>Measured At</th>
+                    <th>Sound Pressure Level</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                {% for row in measurements %}
+                    <tr>
+                        {#                    <td>{{ row.device_id }}</td>#}
+                        <td>{{ row.measured_at.ctime }}</td>
+                        <td>{{ row.spl_value }}</td>
+                        <td>{{ row.latitude }}</td>
+                        <td>{{ row.longitude }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
 
     </div>
 

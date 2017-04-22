@@ -1,0 +1,42 @@
+<div id="prs_tab" class="col s12">
+    <div class="inner-table">
+        <table class="highlight centered">
+            <thead>
+                <tr>
+                    <th><p>
+                        <input type="checkbox" id="checkAllPrs" value="0"/>
+                        <label for="checkAllPrs"></label>
+                    </p></th>
+                    <th>Measured at</th>
+                    <th>Average SPL</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+
+            {% for row in private_data_single %}
+                <tr id="row_prs{{ row.id }}">
+                    <td>
+                        <p>
+                            <input type="checkbox" id="prs{{ row.id }}" value="{{ row.id }}"/>
+                            <label for="prs{{ row.id }}"></label>
+                        </p>
+                    </td>
+                    <td><a href="{% url 'get_detail_prs' pk=row.id %}">{{ row.start_time }}</a></td>
+                    <td>{{ row.average_spl }}</td>
+                    <td>{{ row.duration }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="clear-fix2 center-div">
+        <button class="btn" id="btn-visualize-prs">Visualize</button>
+    </div>
+
+    <p class="center-align">Or</p>
+
+    <div class="clear-fix2 center-div">
+        <button class="btn-flat" id="btn-delete-prs">Delete</button>
+    </div>
+</div>
+

@@ -1,0 +1,31 @@
+<div id="pbs_tab" class="col s12">
+    <div class="inner-table">
+        <table class="highlight centered">
+            <thead>
+                <tr>
+                    <th><p>
+                        <input type="checkbox" id="checkAllPbs"/>
+                        <label for="checkAllPbs"></label>
+                    </p></th>
+                    <th>Measured at</th>
+                    <th>Average SPL</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+
+            {% for row in public_data_single %}
+                <tr>
+                    <td>
+                        <p>
+                            <input type="checkbox" id="pbs{{ row.id }}"/>
+                            <label for="pbs{{ row.id }}"></label>
+                        </p>
+                    </td>
+                    <td><a href="{% url 'get_detail_pbs' pk=row.id %}">{{ row.start_time }}</a></td>
+                    <td>{{ row.average_spl }}</td>
+                    <td>{{ row.duration }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>

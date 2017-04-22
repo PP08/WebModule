@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import LoginForm
 from django.views.decorators.csrf import csrf_exempt
-from .models import Sum_measurement_single, PrivateSingleAverage, PublicSingleAverage, PublicSingleDetail
+from .models import Sum_measurement_single, PrivateSingleAverage, PublicSingleAverage, PublicSingleDetail, \
+    PrivateSingleDetail
 from django.core import serializers
 import json
 from django.http import HttpResponse
@@ -124,7 +125,6 @@ def data_filter(request):
     )
 
 
-
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -146,11 +146,10 @@ def data_manager(request):
 
     # print(current_user.id)
 
-    private_data = PrivateSingleAverage.objects.filter(user_name=current_user)
-    public_data = PublicSingleAverage.objects.filter(user_name=current_user)
+    private_data_single = PrivateSingleAverage.objects.filter(user_name=current_user)
+    public_data_single = PublicSingleAverage.objects.filter(user_name=current_user)
 
-
-    return render(request, 'noisesearch/user_data.html', {'private_data': private_data, 'public_data': public_data})
+    return render(request, 'noisesearch/user_data.html', {'private_data_single': private_data_single, 'public_data_single': public_data_single})
 
 
 def user_login(request):
@@ -174,12 +173,36 @@ def user_login(request):
     return render(request, 'noisesearch/login.html', {'form': form})
 
 
-
 def get_detail_pbs(request, pk):
     # measurement = get_object_or_404(PublicSingleDetail, measurement_id=pk)
 
-    measurement = PublicSingleDetail.objects.filter(measurement_id=pk).order_by('measured_at')
-    print(measurement)
+    measurements = PublicSingleDetail.objects.filter(measurement_id=pk).order_by('measured_at')
+    # print(measurement)
+    return render(request, 'noisesearch/details_data.html', {'measurements': measurements})
 
-    return render(request, 'noisesearch/details_data.html', {'measurement': measurement})
 
+@login_required
+def get_detail_prs(request, pk):
+    measurements = PrivateSingleDetail.objects.filter(measurement_id=pk, user_name=str(request.user))
+    return render(request, 'noisesearch/details_data.html', {'measurements': measurements})
+
+
+@login_required
+@csrf_exempt
+def delete_selected_private_data(request):
+    model_name = request.POST.get('modelName')
+    ids = request.POST.getlist('ids[]')
+
+    if model_name == 'privateSingle':
+        for id in ids:
+            PrivateSingleAverage.objects.filter(id=int(id), user_name=request.user).delete()
+
+    return_data = {'message': 'success'}
+    return_data = json.dumps(return_data)
+
+    return HttpResponse(
+        return_data,
+        content_type="application/json"
+    )
+
+# def visualize_selected_private_data(request):

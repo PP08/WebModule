@@ -1,92 +1,34 @@
 {% extends 'noisesearch/base.html' %}
-
+{% load static %}
 {% block content %}
     <div class="container">
 
         <div class="row clear-fix">
             <div class="col s12">
                 <ul class="tabs">
-                    <li class="tab col s6"><a href="#prs_tab">Private data</a></li>
-                    <li class="tab col s6"><a href="#pbs_tab">Public Data</a></li>
+                    <li class="tab col s3"><a href="#prs_tab">Private Data (Single)</a></li>
+                    <li class="tab col s3"><a href="#pbs_tab">Public Data (Single)</a></li>
+                    <li class="tab col s3"><a href="#prm_tab">Private Data (Multiple)</a></li>
+                    <li class="tab col s3"><a href="#pbm_tab">Public Data (Multiple)</a></li>
                 </ul>
             </div>
-            <div id="prs_tab" class="col s12">
-                <table>
-                    <thead>
-                        <tr>
-                            <th><p>
-                                <input type="checkbox" id="checkAllPrs"/>
-                                <label for="checkAllPrs"></label>
-                            </p></th>
-                            <th>Measured at</th>
-                            <th>Average SPL</th>
-                            <th>Duration</th>
-                        </tr>
-                    </thead>
-                </table>
 
-                <div class="table-scroll">
-                    <table class="highlight">
-                        <tbody>
-                            {% for row in private_data %}
-                                <tr>
-                                    <td>
-                                        <p>
-                                            <input type="checkbox" id="prs{{ row.id }}"/>
-                                            <label for="prs{{ row.id }}"></label>
-                                        </p>
-                                    </td>
-                                    <td>{{ row.start_time }}</td>
-                                    <td>{{ row.average_spl }}</td>
-                                    <td>{{ row.duration }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="row clear-fix2">
-                    <div class="col s4 offset-s4">
-                        <button class="btn">Visualize on maps</button>
-                    </div>
+            {% include 'noisesearch/tabs/_private_single.html' %}
+            {% include 'noisesearch/tabs/_public_single.html' %}
 
-                    <div class="col s2">
-                        <button class="btn btn-flat">Delete</button>
-                    </div>
-                </div>
+            <div id="prm_tab" class="col s12">
+                <p>nothing's here right now</p>
             </div>
 
-            <div id="pbs_tab" class="col s12">
-                <table>
-                    <thead>
-                    <tr>
-                        <th><p>
-                            <input type="checkbox" id="checkAllPbs"/>
-                            <label for="checkAllPbs"></label>
-                        </p></th>
-                        <th>Measured at</th>
-                        <th>Average SPL</th>
-                        <th>Duration</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    {% for row in public_data %}
-                        <tr>
-                            <td>
-                                <p>
-                                    <input type="checkbox" id="pbs{{ row.id }}"/>
-                                    <label for="pbs{{ row.id }}"></label>
-                                </p>
-                            </td>
-                            <td><a href="{% url 'get_detail_pbs' pk=row.id %}">{{ row.start_time }}</a></td>
-                            <td>{{ row.average_spl }}</td>
-                            <td>{{ row.duration }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-
+            <div id="pbm_tab" class="col s12">
+                <p>and here, too</p>
             </div>
         </div>
     </div>
 {% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/dataManagerHelper.js' %}"></script>
+{% endblock %}
+
+
