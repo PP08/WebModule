@@ -29,7 +29,7 @@
             <li><a href="{% url 'logout' %}">Log out</a></li>
         </ul>
 
-        <nav>
+        <nav class="nav-extended">
             <div class="nav-wrapper">
                 <a href="{% url 'home' %}" class="brand-logo">Noise Search</a>
                 <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
@@ -48,7 +48,6 @@
                 </ul>
             </div>
         </nav>
-
         {% include 'noisesearch/_modal.html' %}
         <div class="content">
             {% block content %}

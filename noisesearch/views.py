@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import LoginForm
 from django.views.decorators.csrf import csrf_exempt
-from .models import Sum_measurement_single, PrivateSingleAverage, PublicSingleAverage
+from .models import Sum_measurement_single, PrivateSingleAverage, PublicSingleAverage, PublicSingleDetail
 from django.core import serializers
 import json
 from django.http import HttpResponse
@@ -17,7 +17,7 @@ from django.contrib.auth.decorators import login_required
 def home_page(request):
     global average_longitude, average_latitude, average_spl_value, ids
 
-    objects = serializers.serialize("json", Sum_measurement_single.objects.all())
+    objects = serializers.serialize("json", PublicSingleAverage.objects.all())
 
     tobjects = json.loads(objects)
 
@@ -48,7 +48,7 @@ def get_details(request):
     indices = request.GET.getlist('ids[]')
     data = []
     for id in indices:
-        data.append(serializers.serialize('json', Sum_measurement_single.objects.filter(measurement_id=int(id))))
+        data.append(serializers.serialize('json', PublicSingleAverage.objects.filter(id=int(id))))
 
     returnString = ""
     for element in data:
@@ -172,3 +172,14 @@ def user_login(request):
         form = LoginForm()
 
     return render(request, 'noisesearch/login.html', {'form': form})
+
+
+
+def get_detail_pbs(request, pk):
+    # measurement = get_object_or_404(PublicSingleDetail, measurement_id=pk)
+
+    measurement = PublicSingleDetail.objects.filter(measurement_id=pk).order_by('measured_at')
+    print(measurement)
+
+    return render(request, 'noisesearch/details_data.html', {'measurement': measurement})
+

@@ -3,55 +3,90 @@
 {% block content %}
     <div class="container">
 
+        <div class="row clear-fix">
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s6"><a href="#prs_tab">Private data</a></li>
+                    <li class="tab col s6"><a href="#pbs_tab">Public Data</a></li>
+                </ul>
+            </div>
+            <div id="prs_tab" class="col s12">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><p>
+                                <input type="checkbox" id="checkAllPrs"/>
+                                <label for="checkAllPrs"></label>
+                            </p></th>
+                            <th>Measured at</th>
+                            <th>Average SPL</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+                </table>
 
-        <h4 class="center-align">Private data</h4>
-        <table>
-            <thead>
-                <tr>
-                    <th>Check</th>
-                    <th>Measured at</th>
-                    <th>Average SPL</th>
-                    <th>Duration</th>
-                </tr>
-            </thead>
+                <div class="table-scroll">
+                    <table class="highlight">
+                        <tbody>
+                            {% for row in private_data %}
+                                <tr>
+                                    <td>
+                                        <p>
+                                            <input type="checkbox" id="prs{{ row.id }}"/>
+                                            <label for="prs{{ row.id }}"></label>
+                                        </p>
+                                    </td>
+                                    <td>{{ row.start_time }}</td>
+                                    <td>{{ row.average_spl }}</td>
+                                    <td>{{ row.duration }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row clear-fix2">
+                    <div class="col s4 offset-s4">
+                        <button class="btn">Visualize on maps</button>
+                    </div>
 
-            <tbody>
-                {% for row in private_data %}
+                    <div class="col s2">
+                        <button class="btn btn-flat">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pbs_tab" class="col s12">
+                <table>
+                    <thead>
                     <tr>
-                        <td><input type="checkbox" />    &nbsp;   </td>
-                        <td>{{ row.start_time }}</td>
-                        <td>{{ row.average_spl }}</td>
-                        <td>{{ row.duration }}</td>
+                        <th><p>
+                            <input type="checkbox" id="checkAllPbs"/>
+                            <label for="checkAllPbs"></label>
+                        </p></th>
+                        <th>Measured at</th>
+                        <th>Average SPL</th>
+                        <th>Duration</th>
                     </tr>
-                {% endfor %}
-                
-            </tbody>
-        </table>
+                    </thead>
 
-        <div class="divider"></div>
+                    <tbody>
+                    {% for row in public_data %}
+                        <tr>
+                            <td>
+                                <p>
+                                    <input type="checkbox" id="pbs{{ row.id }}"/>
+                                    <label for="pbs{{ row.id }}"></label>
+                                </p>
+                            </td>
+                            <td><a href="{% url 'get_detail_pbs' pk=row.id %}">{{ row.start_time }}</a></td>
+                            <td>{{ row.average_spl }}</td>
+                            <td>{{ row.duration }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
 
-        <h4 class="center-align">Public data</h4>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Check</th>
-                    <th>Measured at</th>
-                    <th>Average SPL</th>
-                    <th>Duration</th>
-                </tr>
-            </thead>
-
-            <tbody>
-            {% for row in public_data %}
-                <tr>
-                    <td><input type="checkbox"/> &nbsp;</td>
-                    <td>{{ row.start_time }}</td>
-                    <td>{{ row.average_spl }}</td>
-                    <td>{{ row.duration }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+            </div>
+        </div>
     </div>
 {% endblock %}

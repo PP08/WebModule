@@ -26,7 +26,7 @@ function addMarkers(points) {
     for (var i = 0; i < points.length; i++) {
         var latitude = points[i].latitude;
         var longitude = points[i].longitude;
-        var splvalue = points[i].average_spl_value;
+        var splvalue = points[i].average_spl;
         var marker = L.marker([latitude, longitude]);
         marker.bindPopup('<b>SPL value:</b> ' + splvalue.toString() + '<strong> dB</strong><br><br> ' +
             'Calculated from ' + points[i].ids.length.toString() + ' measurement(s)<br><br>' +

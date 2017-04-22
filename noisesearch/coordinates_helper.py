@@ -72,13 +72,13 @@ def group_the_points(tobjects):
             sum_spl = sum_latitude = sum_longitude = 0
             for element in r:
                 ids.append(element['pk'])
-                sum_spl = sum_spl + element['fields']['average_spl_value']
+                sum_spl = sum_spl + element['fields']['average_spl']
                 sum_latitude = sum_latitude + element['fields']['latitude']
                 sum_longitude = sum_longitude + element['fields']['longitude']
 
             average_spl_value = round(sum_spl / len(r), 2)
             average_latitude = sum_latitude / len(r)
             average_longitude = sum_longitude / len(r)
-            data.append({'ids': ids, 'average_spl_value': average_spl_value, 'latitude': average_latitude,
+            data.append({'ids': ids, 'average_spl': average_spl_value, 'latitude': average_latitude,
                          'longitude': average_longitude})
     return data

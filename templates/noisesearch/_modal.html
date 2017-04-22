@@ -15,11 +15,11 @@
                                     <tbody>
                                         <tr>
                                             <td>Average sound pressure level:</td>
-                                            <td>{{ [0].fields.average_spl_value }} dB</td>
+                                            <td>{{ [0].fields.average_spl }} dB</td>
                                         </tr>
                                         <tr>
                                             <td>Duration measurement:</td>
-                                            <td>{{ [0].fields.measurement_duration }}</td>
+                                            <td>{{ [0].fields.duration }}</td>
                                         </tr>
                                         <tr>
                                             <td>Start time:</td>
@@ -33,7 +33,12 @@
                                         <tr>
                                             <td>Device ID:</td>
                                             <td>{{ [0].fields.device_id }}</td>
-                                    </tr>
+                                        </tr>
+
+                                        <tr>
+                                            <td>User name</td>
+                                            <td>{{ [0].fields.user_name }}</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

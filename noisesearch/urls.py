@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': 'noisesearch/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': 'home'}, name='logout'),
     url(r'^data_manager/$', views.data_manager, name='data_manager'),
+    url(r'data_manager/pbs/(?P<pk>\d+)/$', views.get_detail_pbs, name='get_detail_pbs'),
 ]

@@ -33,3 +33,20 @@
     text-align: center;
     margin: auto;
 }
+
+.clear-fix {
+    margin: 10px;
+}
+
+.clear-fix2 {
+    margin: 20px;
+}
+
+.table-scroll {
+    max-height: 50%;
+    overflow-y: scroll;
+}
+
+.align-tr {
+    display: none;
+}

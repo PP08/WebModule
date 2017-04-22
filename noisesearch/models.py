@@ -68,7 +68,7 @@ class PublicSingleAverage(models.Model):
 
 class PublicSingleDetail(models.Model):
     id = models.AutoField(primary_key=True)
-    measurement_id = models.ForeignKey(PrivateSingleAverage, on_delete=models.CASCADE)
+    measurement_id = models.ForeignKey(PublicSingleAverage, on_delete=models.CASCADE)
     device_id = models.CharField(max_length=30)
     latitude = models.FloatField()
     longitude = models.FloatField()

@@ -40,7 +40,7 @@ class PublicSingle(APIView):
             file_path = settings.MEDIA_ROOT + serializer.data['file'][6:]
 
             if request.user.id == None:
-                username = 'Anonymous'
+                username = '*Anonymous user*'
             else:
                 username = str(request.user)
 
