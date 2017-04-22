@@ -1,5 +1,57 @@
 {% extends 'noisesearch/base.html' %}
 
 {% block content %}
-    <h4>hello</h4>
+    <div class="container">
+
+
+        <h4 class="center-align">Private data</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Check</th>
+                    <th>Measured at</th>
+                    <th>Average SPL</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in private_data %}
+                    <tr>
+                        <td><input type="checkbox" />    &nbsp;   </td>
+                        <td>{{ row.start_time }}</td>
+                        <td>{{ row.average_spl }}</td>
+                        <td>{{ row.duration }}</td>
+                    </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+
+        <div class="divider"></div>
+
+        <h4 class="center-align">Public data</h4>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Check</th>
+                    <th>Measured at</th>
+                    <th>Average SPL</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for row in public_data %}
+                <tr>
+                    <td><input type="checkbox"/> &nbsp;</td>
+                    <td>{{ row.start_time }}</td>
+                    <td>{{ row.average_spl }}</td>
+                    <td>{{ row.duration }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

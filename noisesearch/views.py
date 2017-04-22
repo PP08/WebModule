@@ -1,8 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import DocumentForm_Single, DocumentForm_Multiple
+from .forms import LoginForm
 from django.views.decorators.csrf import csrf_exempt
-from .handleUploadedFile import handle_uploaded_file
-from .models import Sum_measurement_single, Table_single
+from .models import Sum_measurement_single, PrivateSingleAverage, PublicSingleAverage
 from django.core import serializers
 import json
 from django.http import HttpResponse
@@ -11,7 +10,6 @@ from datetime import timedelta
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
-
 
 
 # Create your views here.
@@ -31,18 +29,19 @@ def home_page(request):
     return render(request, 'noisesearch/home.html', {'points': json_data})
 
 
-@csrf_exempt
-def model_form_single(request):
-    if request.method == 'POST':
-        form_single = DocumentForm_Single(request.POST, request.FILES)
-        if form_single.is_valid():
-            file = form_single.save()
-            file_name = file.single
-            handle_uploaded_file(str(file_name))
-            return render(request, 'noisesearch/form_single.html', {'form_single': form_single})
-    else:
-        form_single = DocumentForm_Single()
-        return render(request, 'noisesearch/form_single.html', {'form_single': form_single, })
+# @csrf_exempt
+# def model_form_single(request):
+#     if request.method == 'POST':
+#         form_single = DocumentForm_Single(request.POST, request.FILES)
+#         if form_single.is_valid():
+#             file = form_single.save()
+#             file_name = file.single
+#             print('filename: ', file_name)
+#             handle_uploaded_file(str(file_name))
+#             return render(request, 'noisesearch/form_single.html', {'form_single': form_single})
+#     else:
+#         form_single = DocumentForm_Single()
+#         return render(request, 'noisesearch/form_single.html', {'form_single': form_single, })
 
 
 def get_details(request):
@@ -145,5 +144,31 @@ def signup(request):
 def data_manager(request):
     current_user = request.user
 
-    print(current_user.id)
-    return render(request, 'noisesearch/user_data.html')
+    # print(current_user.id)
+
+    private_data = PrivateSingleAverage.objects.filter(user_name=current_user)
+    public_data = PublicSingleAverage.objects.filter(user_name=current_user)
+
+
+    return render(request, 'noisesearch/user_data.html', {'private_data': private_data, 'public_data': public_data})
+
+
+def user_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(username=cd['username'], password=cd['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponse('Authenticated successfully')
+                else:
+                    return HttpResponse('disabled account')
+
+            else:
+                return HttpResponse('Invalid login')
+    else:
+        form = LoginForm()
+
+    return render(request, 'noisesearch/login.html', {'form': form})

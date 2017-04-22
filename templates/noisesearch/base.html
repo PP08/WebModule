@@ -36,14 +36,14 @@
                 <ul class="right hide-on-med-and-down">
                     <li id="home-page"><a href="{% url 'home' %}">Single Point</a></li>
                     <li id="multiple-page"><a href="#">Multiple Points</a></li>
-                    <li id="test-form-page"><a href="{% url 'upload_single' %}">Test Form</a></li>
+{#                    <li id="test-form-page"><a href="{% url 'upload_single' %}">Test Form</a></li>#}
                     <li id="about-page"><a href="#">About</a></li>
                     <li id="login-nav"><a href="{% url 'login' %}">Login</a></li>
                 </ul>
                 <ul class="side-nav" id="mobile-demo">
                     <li><a href="{% url 'home' %}">Single Point</a></li>
                     <li><a href="#">Multiple Points</a></li>
-                    <li><a href="{% url 'upload_single' %}">Test Form</a></li>
+{#                    <li><a href="{% url 'upload_single' %}">Test Form</a></li>#}
                     <li><a href="#">About</a></li>
                 </ul>
             </div>
@@ -79,7 +79,7 @@
                 var user_name = '{{ user.username }}';
 
                 if (user_name){
-                    document.getElementById('login-nav').innerHTML = '<li><a class="dropdown-button" href="#!" data-activates="dropdown1">' + user_name + '<i class="material-icons right">arrow_drop_down</i></a></li>';
+                    document.getElementById('login-nav').innerHTML = '<li><a class="dropdown-button" href="#!" data-activates="dropdown1">Hello, ' + user_name + '<i class="material-icons right">arrow_drop_down</i></a></li>';
                 }
 
                 $(".dropdown-button").dropdown();
