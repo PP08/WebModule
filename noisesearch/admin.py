@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Table_single
+from .models import PublicSingleDetail, PublicSingleAverage
 # Register your models here.
 
-admin.site.register(Table_single)
+admin.site.register(PublicSingleDetail)
+admin.site.register(PublicSingleAverage)

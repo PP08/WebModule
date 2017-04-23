@@ -1,10 +1,10 @@
 <div id="pbs_tab" class="col s12">
     <div class="inner-table">
-        <table class="highlight centered">
+        <table class="highlight centered" id="table-pbs">
             <thead>
                 <tr>
                     <th><p>
-                        <input type="checkbox" id="checkAllPbs"/>
+                        <input type="checkbox" id="checkAllPbs" value="0"/>
                         <label for="checkAllPbs"></label>
                     </p></th>
                     <th>Measured at</th>
@@ -13,19 +13,41 @@
                 </tr>
             </thead>
 
-            {% for row in public_data_single %}
-                <tr>
-                    <td>
-                        <p>
-                            <input type="checkbox" id="pbs{{ row.id }}"/>
-                            <label for="pbs{{ row.id }}"></label>
-                        </p>
-                    </td>
-                    <td><a href="{% url 'get_detail_pbs' pk=row.id %}">{{ row.start_time }}</a></td>
-                    <td>{{ row.average_spl }}</td>
-                    <td>{{ row.duration }}</td>
-                </tr>
-            {% endfor %}
+            <tbody>
+                {% for row in public_data_single %}
+                    <tr id="row_pbs{{ row.id }}">
+                        <td>
+                            <p>
+                                <input type="checkbox" id="pbs{{ row.id }}" value="{{ row.id }}"/>
+                                <label for="pbs{{ row.id }}"></label>
+                            </p>
+                        </td>
+                        <td><a href="{% url 'get_detail_pbs' pk=row.id %}">{{ row.start_time }}</a></td>
+                        <td>{{ row.average_spl }}</td>
+                        <td>{{ row.duration }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
+    </div>
+
+    <div class="clear-fix2">
+        <div class="center-div">
+            <div class="col s4">
+                <button class="btn" id="btn-visualize-pbs">Visualize</button>
+            </div>
+        </div>
+
+        <div class="center-div">
+            <div class="col s4">
+                <button class="btn" id="btn-make-private-pbs">Make Private</button>
+            </div>
+        </div>
+
+        <div class="center-div">
+            <div class="col s4">
+                <button class="btn-flat" id="btn-delete-pbs">Delete</button>
+            </div>
+        </div>
     </div>
 </div>

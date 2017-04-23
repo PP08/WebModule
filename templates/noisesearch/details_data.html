@@ -20,8 +20,7 @@
                 <tbody>
                 {% for row in measurements %}
                     <tr>
-                        {#                    <td>{{ row.device_id }}</td>#}
-                        <td>{{ row.measured_at.ctime }}</td>
+                        <td class="dateTime">{{ row.measured_at }}</td>
                         <td>{{ row.spl_value }}</td>
                         <td>{{ row.latitude }}</td>
                         <td>{{ row.longitude }}</td>
@@ -29,10 +28,26 @@
                 {% endfor %}
                 </tbody>
             </table>
-
         </div>
-
-
     </div>
 
+{% endblock %}
+
+{% block script %}
+    <script>
+
+        $(document).ready(function () {
+{#            var dateTime = document.getElementsByClassName("dateTime");#}
+{#                for(var i = 0; i < dateTime.length; i++){#}
+{##}
+{#                    $(dateTime[i]).text(new Date($(dateTime[i]).text()));#}
+{##}
+{#                    console.log(new Date($(dateTime[i]).text()));#}
+{#                    console.log($(dateTime[i]).text());#}
+{#                }#}
+
+            console.log(new Date('2017-04-07T23:16:00Z'));
+        });
+
+    </script>
 {% endblock %}

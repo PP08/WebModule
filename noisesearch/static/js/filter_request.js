@@ -74,7 +74,6 @@ $(document).ready(function () {
 
     function get_data(array) {
         $.ajax({
-
             url: /data_filter/,
             type: 'POST',
             data: {'filters': array},

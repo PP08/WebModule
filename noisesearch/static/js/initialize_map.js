@@ -47,8 +47,8 @@ function get_details(clicked_id) {
         dataType: 'text',
         success: function (data) {
             if (data) {
-                data = data.replace(/Z/gi, '');
-                data = data.replace(/T/g, ' ');
+                // data = data.replace(/Z/gi, '');
+                // data = data.replace(/T/g, ' ');
                 var string_data = '[' + data + ']'
 
                 var jsonData = JSON.parse(string_data);
@@ -62,6 +62,23 @@ function get_details(clicked_id) {
 
                 $('.modal').modal();
                 $('#modal-detail').modal('open');
+
+                var dateTime = document.getElementsByClassName("dateTime");
+
+                for(var i = 0; i < dateTime.length; i++){
+
+                    // alert($(this).text());
+                    // $(dateTime[i]).innerHTML = (new Date($(dateTime[i]).text())).toString();
+                    $(dateTime[i]).text(new Date($(dateTime[i]).text()));
+
+                    console.log(new Date($(dateTime[i]).text()));
+                }
+
+                // console.log(dateTime[0].text());
+                // console.log(dateTime.text());
+
+                // TODO: convert date time in the results
+
             }
         }
     });

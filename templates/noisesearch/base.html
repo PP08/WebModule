@@ -29,21 +29,19 @@
             <li><a href="{% url 'logout' %}">Log out</a></li>
         </ul>
 
-        <nav class="nav-extended">
+        <nav>
             <div class="nav-wrapper">
                 <a href="{% url 'home' %}" class="brand-logo">Noise Search</a>
                 <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
                     <li id="home-page"><a href="{% url 'home' %}">Single Point</a></li>
                     <li id="multiple-page"><a href="#">Multiple Points</a></li>
-{#                    <li id="test-form-page"><a href="{% url 'upload_single' %}">Test Form</a></li>#}
                     <li id="about-page"><a href="#">About</a></li>
                     <li id="login-nav"><a href="{% url 'login' %}">Login</a></li>
                 </ul>
                 <ul class="side-nav" id="mobile-demo">
                     <li><a href="{% url 'home' %}">Single Point</a></li>
                     <li><a href="#">Multiple Points</a></li>
-{#                    <li><a href="{% url 'upload_single' %}">Test Form</a></li>#}
                     <li><a href="#">About</a></li>
                 </ul>
             </div>
