@@ -44,8 +44,8 @@
                             </div>
                         </div>
 
-                        <div class="col s5 offset-s1 div-graphs">
-                            <a href="/details/graph/{{ [0].pk }}/" class="center-icon"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i><p>Load Graph</p></a>
+                        <div class="col s5 offset-s1 div-graphs" id="graphs{{ [0].pk }}">
+                            <a href="/graphs/" class="center-icon" id="graphs-{{ [0].pk }}"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i><p>Load Graph</p></a>
                         </div>
                     </div>
                 {{/each}}

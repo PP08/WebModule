@@ -10,8 +10,11 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': 'noisesearch/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': 'home'}, name='logout'),
     url(r'^data_manager/$', views.data_manager, name='data_manager'),
-    url(r'data_manager/pbs/(?P<pk>\d+)/$', views.get_detail_pbs, name='get_detail_pbs'),
-    url(r'data_manager/prs/(?P<pk>\d+)/$', views.get_detail_prs, name='get_detail_prs'),
-    url(r'data_manager/delete_data/$', views.delete_selected_data, name='delete_selected_data'),
-    url(r'data_manager/change_state_single/$', views.change_state_single, name='change_state_single'),
+    url(r'^data_manager/pbs/(?P<pk>\d+)/$', views.get_detail_pbs, name='get_detail_pbs'),
+    url(r'^data_manager/prs/(?P<pk>\d+)/$', views.get_detail_prs, name='get_detail_prs'),
+    url(r'^data_manager/delete_data/$', views.delete_selected_data, name='delete_selected_data'),
+    url(r'^data_manager/change_state_single/$', views.change_state_single, name='change_state_single'),
+    url(r'^graphs/$', views.renderGraphs, name='render_graphs'),
+
+    url(r'^test/$', views.test, name='test'),
 ]

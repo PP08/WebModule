@@ -50,7 +50,7 @@ function get_details(clicked_id) {
                 var string_data = '[' + data + ']'
 
                 var jsonData = JSON.parse(string_data);
-                console.log(jsonData);
+                // console.log(jsonData);
 
                 var myModal = document.getElementById('modal');
                 var modal_template = Handlebars.compile(document.getElementById('modal-template').innerHTML);
@@ -66,7 +66,7 @@ function get_details(clicked_id) {
                 for (var j = 0; j < dateTime.length; j++) {
                     $(dateTime[j]).text(new Date($(dateTime[j]).text()));
 
-                    console.log(new Date($(dateTime[j]).text()));
+                    // console.log(new Date($(dateTime[j]).text()));
                 }
 
                 // TODO: set height for graph div

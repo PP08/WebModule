@@ -91,15 +91,15 @@ def data_filter(request):
         elif f['name'] == 'max_date':
             max_date = f['value']
 
-    objects = Sum_measurement_single.objects.all()
+    objects = PublicSingleAverage.objects.all()
 
     if min_duration != None:
         min_duration = timedelta(minutes=int(min_duration))
         max_duration = timedelta(minutes=int(max_duration))
-        objects = objects.filter(measurement_duration__gte=min_duration).filter(measurement_duration__lte=max_duration)
+        objects = objects.filter(duration__gte=min_duration).filter(duration__lte=max_duration)
 
     if (min_spl != None):
-        objects = objects.filter(average_spl_value__gte=int(min_spl)).filter(average_spl_value__lte=int(max_spl))
+        objects = objects.filter(average_spl__gte=int(min_spl)).filter(average_spl__lte=int(max_spl))
 
     if (min_date != None):
         min_date = coordinates_helper.convert_date_time(min_date)
@@ -283,4 +283,31 @@ def change_state_single(request):
     return HttpResponse(
         returnString,
         content_type="application/text")
+
+
+
+def renderGraphs(request):
+
+    ids = []
+
+    objects = PublicSingleDetail.objects.filter(measurement_id=int(request.GET.get('id')))
+
+    for ob in objects:
+        ids.append(ob.spl_value)
+
+    return_data = {'spl_value': ids}
+
+    return_data = json.dumps(return_data)
+
+    return HttpResponse(
+        return_data,
+        content_type='application/json'
+    )
+
+
+
+def test(request):
+    """"""
+
+    return render(request, 'noisesearch/test/test.html')
 
