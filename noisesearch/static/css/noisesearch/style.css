@@ -59,3 +59,21 @@
     z-index: 1500;
 }
 
+.div-graphs {
+    background: lightgray;
+    display: table;
+    border-radius: 5px;
+    /*width: 100%;*/
+}
+
+.div-graphs a {
+    /*background: red;*/
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.center-icon {
+
+}
+

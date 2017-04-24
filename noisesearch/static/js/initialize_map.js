@@ -17,8 +17,8 @@ function initialize_map(points) {
     }).addTo(mymap);
 
     markers = new L.FeatureGroup();
-
     addMarkers(points);
+
 }
 
 
@@ -47,8 +47,6 @@ function get_details(clicked_id) {
         dataType: 'text',
         success: function (data) {
             if (data) {
-                // data = data.replace(/Z/gi, '');
-                // data = data.replace(/T/g, ' ');
                 var string_data = '[' + data + ']'
 
                 var jsonData = JSON.parse(string_data);
@@ -65,20 +63,23 @@ function get_details(clicked_id) {
 
                 var dateTime = document.getElementsByClassName("dateTime");
 
-                for(var i = 0; i < dateTime.length; i++){
+                for (var j = 0; j < dateTime.length; j++) {
+                    $(dateTime[j]).text(new Date($(dateTime[j]).text()));
 
-                    // alert($(this).text());
-                    // $(dateTime[i]).innerHTML = (new Date($(dateTime[i]).text())).toString();
-                    $(dateTime[i]).text(new Date($(dateTime[i]).text()));
-
-                    console.log(new Date($(dateTime[i]).text()));
+                    console.log(new Date($(dateTime[j]).text()));
                 }
 
-                // console.log(dateTime[0].text());
-                // console.log(dateTime.text());
+                // TODO: set height for graph div
 
-                // TODO: convert date time in the results
+                var div_table = document.getElementsByClassName("div-table");
+                var div_graphs = document.getElementsByClassName("div-graphs");
+                var div_ids = document.getElementsByClassName("div-ids");
+                for (var k = 0; k < div_table.length; k++) {
+                    $(div_graphs[k]).css("height", $(div_table[k]).height());
+                    $(div_ids[k]).css("height", $(div_table[k]).height());
+                }
 
+                renderGraphs();
             }
         }
     });

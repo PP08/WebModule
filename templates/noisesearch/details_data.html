@@ -4,12 +4,25 @@
 
     <div class="container">
 
-        <h4 class="clear-fix2 center-align">Details of the measurement</h4>
+
+        <div class="clear-fix2 row">
+            <div class="col s12">
+                <h6><a href="{% url 'data_manager' %}"><i class="fa fa-angle-left"></i>Back to data manager</a></h6>
+{#                <a class="center-align">Details of the measurement</a>#}
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col s12">
+                <h5 class="center-align">Details of the measurement</h5>
+            </div>
+        </div>
+
         <div class="inner-table">
             <table class="centered highlight">
                 <thead>
                 <tr>
-                    {#                <th>Device ID</th>#}
                     <th>Measured At</th>
                     <th>Sound Pressure Level</th>
                     <th>Latitude</th>
@@ -33,10 +46,10 @@
 
 {% endblock %}
 
-{% block script %}
-    <script>
-
-        $(document).ready(function () {
+{#{% block script %}#}
+{#    <script>#}
+{##}
+{#        $(document).ready(function () {#}
 {#            var dateTime = document.getElementsByClassName("dateTime");#}
 {#                for(var i = 0; i < dateTime.length; i++){#}
 {##}
@@ -45,9 +58,9 @@
 {#                    console.log(new Date($(dateTime[i]).text()));#}
 {#                    console.log($(dateTime[i]).text());#}
 {#                }#}
-
-            console.log(new Date('2017-04-07T23:16:00Z'));
-        });
-
-    </script>
-{% endblock %}
+{##}
+{#            console.log(new Date('2017-04-07T23:16:00Z'));#}
+{#        });#}
+{##}
+{#    </script>#}
+{#{% endblock %}#}

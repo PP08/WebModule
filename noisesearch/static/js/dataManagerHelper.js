@@ -139,52 +139,52 @@ $(document).ready(function () {
 
     }
 
-    function make_public(modelName) {
-        var selected_items = [];
-        var selected_items_tr = [];
-        $('#prs_tab :checkbox:checked').each(function () {
-            selected_items.push($(this).val());
-        });
-
-        if (selected_items[0] == 0) {
-            selected_items.splice(0, 1);
-        }
-        if (selected_items.length > 0) {
-            for (var i = 0; i < selected_items.length; i++) {
-                selected_items_tr.push("row_prs" + selected_items[i]);
-            }
-
-            $.ajax({
-                url: '/data_manager/make_public/',
-                type: 'POST',
-                data: {'modelName': modelName, 'ids[]': selected_items},
-                dataType: 'text',
-
-                success: function (data) {
-                    for (var i = 0; i < selected_items_tr.length; i++) {
-                        $('#' + selected_items_tr[i]).fadeOut("slow", function () {
-                            $(this).remove();
-                        });
-                    }
-
-                    var string_data = '[' + data + ']'
-                    var jsonData = JSON.parse(string_data);
-                    console.log(jsonData);
-
-                    console.log(jsonData[0][0]['fields']);
-                    console.log(jsonData[0][0]['pk']);
-
-                    for (var j = 0; j < jsonData.length; j++) {
-                        $('#table-pbs tbody').append('<tr id="row_pbs' + jsonData[j][0]['pk'] + '">' +
-                            '<td><p><input type="checkbox" id="pbs' + jsonData[j][0]['pk'] + '" value="' + jsonData[j][0]['pk'] + '"/>' +
-                            '<label for="pbs' + jsonData[j][0]['pk'] + '"></label></p></td>' +
-                            '<td><a href="/data_manager/pbs/' + jsonData[j][0]['pk'] + '">' + new Date(jsonData[j][0]['fields'].start_time) + '</a></td>' +
-                            '<td>' + jsonData[j][0]['fields'].average_spl + '</td>' +
-                            '<td>' + jsonData[j][0]['fields'].duration + '</td></tr>');
-                    }
-                }
-            });
-        }
-    }
+    // function make_public(modelName) {
+    //     var selected_items = [];
+    //     var selected_items_tr = [];
+    //     $('#prs_tab :checkbox:checked').each(function () {
+    //         selected_items.push($(this).val());
+    //     });
+    //
+    //     if (selected_items[0] == 0) {
+    //         selected_items.splice(0, 1);
+    //     }
+    //     if (selected_items.length > 0) {
+    //         for (var i = 0; i < selected_items.length; i++) {
+    //             selected_items_tr.push("row_prs" + selected_items[i]);
+    //         }
+    //
+    //         $.ajax({
+    //             url: '/data_manager/make_public/',
+    //             type: 'POST',
+    //             data: {'modelName': modelName, 'ids[]': selected_items},
+    //             dataType: 'text',
+    //
+    //             success: function (data) {
+    //                 for (var i = 0; i < selected_items_tr.length; i++) {
+    //                     $('#' + selected_items_tr[i]).fadeOut("slow", function () {
+    //                         $(this).remove();
+    //                     });
+    //                 }
+    //
+    //                 var string_data = '[' + data + ']'
+    //                 var jsonData = JSON.parse(string_data);
+    //                 console.log(jsonData);
+    //
+    //                 console.log(jsonData[0][0]['fields']);
+    //                 console.log(jsonData[0][0]['pk']);
+    //
+    //                 for (var j = 0; j < jsonData.length; j++) {
+    //                     $('#table-pbs tbody').append('<tr id="row_pbs' + jsonData[j][0]['pk'] + '">' +
+    //                         '<td><p><input type="checkbox" id="pbs' + jsonData[j][0]['pk'] + '" value="' + jsonData[j][0]['pk'] + '"/>' +
+    //                         '<label for="pbs' + jsonData[j][0]['pk'] + '"></label></p></td>' +
+    //                         '<td><a href="/data_manager/pbs/' + jsonData[j][0]['pk'] + '">' + new Date(jsonData[j][0]['fields'].start_time) + '</a></td>' +
+    //                         '<td>' + jsonData[j][0]['fields'].average_spl + '</td>' +
+    //                         '<td>' + jsonData[j][0]['fields'].duration + '</td></tr>');
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
 
 });

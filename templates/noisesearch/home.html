@@ -3,10 +3,10 @@
 
 {% block header %}
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet' />
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet'/>
 {% endblock %}
 
 {% block content %}
@@ -14,7 +14,7 @@
 
     <div id="modal"></div>
 
-{#    floating buttons#}
+    {#    floating buttons#}
     <div class="fixed-action-btn horizontal">
         <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" id="btn-filter-trigger">
             <i class="material-icons">menu</i>
@@ -23,9 +23,9 @@
 
     {% include 'noisesearch/_filter_modal.html' %}
 
-
     <script src="{% static 'js/initialize_map.js' %}"></script>
     <script src="{% static 'js/filter_request.js' %}"></script>
+    <script src="{% static 'js/graphsRender.js' %}"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -33,17 +33,14 @@
             $('.modal').modal();
 
             $('#btn-filter-trigger').click(function () {
-               $('#modal-filter').modal('open');
+                $('#modal-filter').modal('open');
             });
 
             $('.datepicker').pickadate({
                 selectMonths: true, // Creates a dropdown to control month
                 selectYears: 15 // Creates a dropdown of 15 years to control year
             });
-
             initialize_map({{ points|safe }})
         });
     </script>
-
-
 {% endblock %}

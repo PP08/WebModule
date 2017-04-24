@@ -5,11 +5,11 @@
             <div class="modal-content">
                 {{#each objects}}
                     <div class="row">
-                        <div class="col s1">
+                        <div class="col s1 div-ids">
                             <p>{{@index}}</p>
                         </div>
 
-                        <div class="col s5">
+                        <div class="col s5 div-table">
                             <div class="table-details">
                                 <table class="table highlight">
                                     <tbody>
@@ -44,8 +44,8 @@
                             </div>
                         </div>
 
-                        <div class="col s5 offset-s1">
-                            <p>graphs will be here</p>
+                        <div class="col s5 offset-s1 div-graphs">
+                            <a href="/details/graph/{{ [0].pk }}/" class="center-icon"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i><p>Load Graph</p></a>
                         </div>
                     </div>
                 {{/each}}
