@@ -12,7 +12,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 
-
+from django.core.serializers.json import DjangoJSONEncoder
 # Create your views here.
 
 def home_page(request):
@@ -288,23 +288,27 @@ def change_state_single(request):
 
 def renderGraphs(request):
 
-    ids = []
+    spl_values = []
+    timestamps = []
 
     objects = PublicSingleDetail.objects.filter(measurement_id=int(request.GET.get('id')))
 
     for ob in objects:
-        ids.append(ob.spl_value)
+        spl_values.append(ob.spl_value)
+        timestamps.append(ob.measured_at.astimezone())
 
-    return_data = {'spl_value': ids}
+    print(timestamps[0])
 
-    return_data = json.dumps(return_data)
+    return_data = {'spl_values': spl_values, 'timestamps': timestamps}
+
+    return_data = json.dumps(return_data, cls=DjangoJSONEncoder)
+
+    print(return_data)
 
     return HttpResponse(
         return_data,
         content_type='application/json'
     )
-
-
 
 def test(request):
     """"""

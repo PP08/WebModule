@@ -6,6 +6,8 @@ var markers;
 var mymap;
 
 function initialize_map(points) {
+
+    setHeightForMap();
     g_points = points;
     mymap = L.map('mapid').setView([48.72305363, 44.53600696], 13);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibGFuY2Vsb2Z0MTAwOCIsImEiOiJjajE4OXExcWkwMDRyMzJwcDNsdDIzMzU4In0.1JIG2H6f-CZ572Wmzxm77g', {
@@ -21,6 +23,12 @@ function initialize_map(points) {
 
 }
 
+function setHeightForMap() {
+    // console.log('triggered');
+    var height = $(window).height();
+    var offset = $('#top-nav-bar').height();
+    $('div#mapid').css({'height': height - offset});
+}
 
 function addMarkers(points) {
     for (var i = 0; i < points.length; i++) {
@@ -72,14 +80,19 @@ function get_details(clicked_id) {
                 // TODO: set height for graph div
 
                 var div_table = document.getElementsByClassName("div-table");
-                var div_graphs = document.getElementsByClassName("div-graphs");
-                var div_ids = document.getElementsByClassName("div-ids");
-                for (var k = 0; k < div_table.length; k++) {
-                    $(div_graphs[k]).css("height", $(div_table[k]).height());
-                    $(div_ids[k]).css("height", $(div_table[k]).height());
-                }
+                // var div_graphs = document.getElementsByClassName("div-graphs");
+                // var div_ids = document.getElementsByClassName("div-ids");
+                // for (var k = 0; k < div_table.length; k++) {
+                //     $(div_ids[k]).css("height", $(div_table[k]).height());
+                // }
 
-                renderGraphs();
+                var height = $(div_table[0]).height();
+                var width = $(div_table[0]).width();
+                $("div.div-graphs").css("height", height);
+                // $("div.div-graphs").css("width", $(div_table[0]).width());
+                $("div.div-ids").css("height", height);
+                // var width = document.getElementsByClassName("div-table")[0].width();
+                renderGraphs(width, height);
             }
         }
     });

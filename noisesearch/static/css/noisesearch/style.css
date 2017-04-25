@@ -5,7 +5,6 @@
 
 #mapid {
     width: 100%;
-    height: 100%;
 }
 
 #filter-form {
@@ -39,11 +38,11 @@
 }
 
 .clear-fix2 {
-    margin: 20px;
+    margin: 40px;
 }
 
 .inner-table {
-    max-height: 50%;
+    max-height: 65%;
     overflow-y: scroll;
 }
 
@@ -60,10 +59,10 @@
 }
 
 .div-graphs {
-    background: lightgray;
+    /*background: lightgray;*/
     display: table;
     border-radius: 5px;
-    /*width: 100%;*/
+    /*width: 300px;*/
 }
 
 .div-graphs .center-icon {
@@ -78,9 +77,14 @@
     margin-left: 20px;
 }
 
-#test-graphs {
-    width: 300px;
-    height: 300px;
+.table-custom {
+    background: white;
 }
 
+#modal-detail {
+    background: #F1F1F1;
+}
 
+.div-ids {
+    /*background: white;*/
+}
