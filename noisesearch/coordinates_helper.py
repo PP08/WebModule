@@ -46,8 +46,8 @@ def group_the_points(tobjects):
     while len(tobjects) > 0:
         row = []
         remove_id = []
-        x0 = tobjects[0]['fields']['latitude']
-        y0 = tobjects[0]['fields']['longitude']
+        x0 = tobjects[0].latitude
+        y0 = tobjects[0].longitude
         row.append(tobjects[0])
 
         # print('list_row ', row)
@@ -55,8 +55,8 @@ def group_the_points(tobjects):
 
         if len(tobjects) > 0:
             for i in range(0, len(tobjects)):
-                x1 = tobjects[i]['fields']['latitude']
-                y1 = tobjects[i]['fields']['longitude']
+                x1 = tobjects[i].latitude
+                y1 = tobjects[i].longitude
 
                 if haversine(x0, y0, x1, y1) < 30:
                     row.append(tobjects[i])
@@ -71,10 +71,10 @@ def group_the_points(tobjects):
             ids = []
             sum_spl = sum_latitude = sum_longitude = 0
             for element in r:
-                ids.append(element['pk'])
-                sum_spl = sum_spl + element['fields']['average_spl']
-                sum_latitude = sum_latitude + element['fields']['latitude']
-                sum_longitude = sum_longitude + element['fields']['longitude']
+                ids.append(element.id)
+                sum_spl = sum_spl + element.average_spl
+                sum_latitude = sum_latitude + element.latitude
+                sum_longitude = sum_longitude + element.longitude
 
             average_spl_value = round(sum_spl / len(r), 2)
             average_latitude = sum_latitude / len(r)

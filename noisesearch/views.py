@@ -13,14 +13,45 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 
 from django.core.serializers.json import DjangoJSONEncoder
+import ast
 # Create your views here.
 
 def home_page(request):
-    global average_longitude, average_latitude, average_spl_value, ids
 
-    objects = serializers.serialize("json", PublicSingleAverage.objects.all())
+    # print(request.GET.get('values')[0])
 
-    tobjects = json.loads(objects)
+    global average_longitude, average_latitude, average_spl_value, ids, objects, sp_objects
+
+    sp_objects = []
+
+    if request.GET.get('modelName') == None:
+        # objects = serializers.serialize("json", PublicSingleAverage.objects.all())
+        objects = PublicSingleAverage.objects.all()
+    else:
+        ids = request.GET.get('values')
+        ids = ast.literal_eval(ids)
+        model_name = request.GET.get('modelName')
+        # sp_objects = []
+        if model_name == 'privateSingle':
+            for id in ids:
+                sp_objects.append(PrivateSingleAverage.objects.get(pk=int(id)))
+        elif model_name == 'publicSingle':
+            for id in ids:
+                sp_objects.append(PublicSingleAverage.objects.get(pk=int(id)))
+
+    temp = []
+
+    if  len(sp_objects) == 0:
+        # tobjects = json.loads(objects)
+        for ob in objects:
+            temp.append(ob)
+        tobjects = temp
+    else:
+        tobjects = sp_objects
+
+    # tobjects = json.loads(objects)
+
+    print(tobjects[0].average_spl)
 
     data = coordinates_helper.group_the_points(tobjects)
     # print(data)
