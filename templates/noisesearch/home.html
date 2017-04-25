@@ -49,7 +49,9 @@
 
             initialize_map({{ points|safe }})
 
-            window.addEventListener("resize", setHeightForMap);
+            window.addEventListener("resize", function () {
+                setHeightForMap();
+            });
 
         });
     </script>

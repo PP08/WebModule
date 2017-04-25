@@ -297,13 +297,13 @@ def renderGraphs(request):
         spl_values.append(ob.spl_value)
         timestamps.append(ob.measured_at.astimezone())
 
-    print(timestamps[0])
+    # print(timestamps[0])
 
     return_data = {'spl_values': spl_values, 'timestamps': timestamps}
 
     return_data = json.dumps(return_data, cls=DjangoJSONEncoder)
 
-    print(return_data)
+    # print(return_data)
 
     return HttpResponse(
         return_data,

@@ -27,7 +27,7 @@ function setHeightForMap() {
     // console.log('triggered');
     var height = $(window).height();
     var offset = $('#top-nav-bar').height();
-    $('div#mapid').css({'height': height - offset});
+    $('div#mapid').css({'height': height - offset, 'width': $(window).width()});
 }
 
 function addMarkers(points) {
@@ -36,9 +36,9 @@ function addMarkers(points) {
         var longitude = points[i].longitude;
         var splvalue = points[i].average_spl;
         var marker = L.marker([latitude, longitude]);
-        marker.bindPopup('<b>SPL value:</b> ' + splvalue.toString() + '<strong> dB</strong><br><br> ' +
+        marker.bindPopup('<div class="center-align"><b>SPL value:</b> ' + splvalue.toString() + '<b> dB</b></div><br><br> ' +
             'Calculated from ' + points[i].ids.length.toString() + ' measurement(s)<br><br>' +
-            '<button type="button" class="btn btn-default" id="' + i.toString() + '" onClick="get_details(this.id)">Details</button>');
+            '<div class="center-div"><button type="button" class="btn btn-default center-div" id="' + i.toString() + '" onClick="get_details(this.id)">Details</button></div>');
 
         markers.addLayer(marker);
     }
@@ -73,7 +73,6 @@ function get_details(clicked_id) {
 
                 for (var j = 0; j < dateTime.length; j++) {
                     $(dateTime[j]).text(new Date($(dateTime[j]).text()));
-
                     // console.log(new Date($(dateTime[j]).text()));
                 }
 
@@ -81,20 +80,28 @@ function get_details(clicked_id) {
 
                 var div_table = document.getElementsByClassName("div-table");
                 // var div_graphs = document.getElementsByClassName("div-graphs");
-                // var div_ids = document.getElementsByClassName("div-ids");
-                // for (var k = 0; k < div_table.length; k++) {
-                //     $(div_ids[k]).css("height", $(div_table[k]).height());
-                // }
+                var div_ids = document.getElementsByClassName("div-ids");
+
+                for (var k = 0; k < div_table.length; k++) {
+                    $(div_ids[k]).css('background', random_color());
+                    // console.log(random_color());
+                }
 
                 var height = $(div_table[0]).height();
                 var width = $(div_table[0]).width();
                 $("div.div-graphs").css("height", height);
-                // $("div.div-graphs").css("width", $(div_table[0]).width());
-                $("div.div-ids").css("height", height);
-                // var width = document.getElementsByClassName("div-table")[0].width();
+
                 renderGraphs(width, height);
             }
         }
     });
+}
+
+function random_color() {
+    var color = '#';
+    var letters = ['c2185b', '7b1fa2', '1976d2', '303f9f', '00796b', '0097a7', '0288d1', '388e3c', 'f57c00', 'ffa000']; //Set your colors here
+    color += letters[Math.floor(Math.random() * letters.length)];
+
+    return color;
 }
 

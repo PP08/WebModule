@@ -84,7 +84,7 @@ function renderGraphs(width, height) {
                     y: data['spl_values'],
                     line: {                             // set the width of the line.
                         width: 1
-                    },
+                    }
                 };
 
                 var layout = {

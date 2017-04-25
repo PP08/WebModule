@@ -1,55 +1,60 @@
 <!-- Modal Structure -->
 {% verbatim %}
-    <script id="modal-template" type="text/template">
-        <div id="modal-detail" class="modal bottom-sheet">
-            <div class="modal-content">
-                {{#each objects}}
-                    <div class="row">
-                        <div class="col s1 div-ids">
-                            {{inc @index}}
-                        </div>
+<script id="modal-template" type="text/template">
+    <div id="modal-detail" class="modal bottom-sheet">
+        <div class="modal-content">
+            {{#each objects}}
+            <div class="row">
 
-                        <div class="col s5 div-table">
-                            <div class="table-details">
-                                <table class="table highlight table-custom z-depth-2">
-                                    <tbody>
-                                        <tr>
-                                            <td>Average sound pressure level:</td>
-                                            <td>{{ [0].fields.average_spl }} dB</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Duration measurement:</td>
-                                            <td>{{ [0].fields.duration }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Start time:</td>
-                                            <td class="dateTime">{{ [0].fields.start_time }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>End time:</td>
-                                            <td class="dateTime">{{ [0].fields.end_time }}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Device ID:</td>
-                                            <td>{{ [0].fields.device_id }}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>User name</td>
-                                            <td>{{ [0].fields.user_name }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="col s5 offset-s1 div-graphs" id="graphs{{ [0].pk }}">
-                            <a href="/graphs/" class="center-icon" id="graphs-{{ [0].pk }}"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i><p>Load Graph</p></a>
-                        </div>
+                <div class="col s12 m1">
+                    <div class="div-ids z-depth-2">
+                        {{inc @index}}
                     </div>
-                {{/each}}
+                </div>
+
+                <div class="col s12 m5 div-table">
+                    <div class="table-details">
+                        <table class="table highlight table-custom z-depth-2">
+                            <tbody>
+                            <tr>
+                                <td>Average sound pressure level:</td>
+                                <td>{{ [0].fields.average_spl }} dB</td>
+                            </tr>
+                            <tr>
+                                <td>Duration measurement:</td>
+                                <td>{{ [0].fields.duration }}</td>
+                            </tr>
+                            <tr>
+                                <td>Start time:</td>
+                                <td class="dateTime">{{ [0].fields.start_time }}</td>
+                            </tr>
+                            <tr>
+                                <td>End time:</td>
+                                <td class="dateTime">{{ [0].fields.end_time }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Device ID:</td>
+                                <td>{{ [0].fields.device_id }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>User name</td>
+                                <td>{{ [0].fields.user_name }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col s12 m5 offset-m1 div-graphs" id="graphs{{ [0].pk }}">
+                    <a href="/graphs/" class="center-icon" id="graphs-{{ [0].pk }}"><i class="fa fa-bar-chart fa-2x"
+                                                                                       aria-hidden="true"></i>
+                        <p>Load Graph</p></a>
+                </div>
             </div>
+            {{/each}}
         </div>
-    </script>
+    </div>
+</script>
 {% endverbatim %}
