@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import LoginForm
 from django.views.decorators.csrf import csrf_exempt
-from .models import Sum_measurement_single, PrivateSingleAverage, PublicSingleAverage, PublicSingleDetail, \
-    PrivateSingleDetail
+from .models import PrivateSingleAverage, PublicSingleAverage, PublicSingleDetail, \
+    PrivateSingleDetail, PrivateMultipleAverage, PrivateMultipleDetail
 from django.core import serializers
 import json
 from django.http import HttpResponse
@@ -14,10 +14,11 @@ from django.contrib.auth.decorators import login_required
 
 from django.core.serializers.json import DjangoJSONEncoder
 import ast
+
+
 # Create your views here.
 
 def home_page(request):
-
     # print(request.GET.get('values')[0])
 
     global average_longitude, average_latitude, average_spl_value, ids, objects, sp_objects
@@ -33,15 +34,18 @@ def home_page(request):
         model_name = request.GET.get('modelName')
         # sp_objects = []
         if model_name == 'privateSingle':
-            for id in ids:
-                sp_objects.append(PrivateSingleAverage.objects.get(pk=int(id)))
+            if str(request.user) != PrivateSingleAverage.objects.get(pk=int(ids[0])).user_name:
+                return render(request, 'noisesearch/home.html', {'point': None})
+            else:
+                for id in ids:
+                    sp_objects.append(PrivateSingleAverage.objects.get(pk=int(id)))
         elif model_name == 'publicSingle':
             for id in ids:
                 sp_objects.append(PublicSingleAverage.objects.get(pk=int(id)))
 
     temp = []
 
-    if  len(sp_objects) == 0:
+    if len(sp_objects) == 0:
         # tobjects = json.loads(objects)
         for ob in objects:
             temp.append(ob)
@@ -51,7 +55,7 @@ def home_page(request):
 
     # tobjects = json.loads(objects)
 
-    print(tobjects[0].average_spl)
+    # print(tobjects[0].average_spl)
 
     data = coordinates_helper.group_the_points(tobjects)
     # print(data)
@@ -61,22 +65,7 @@ def home_page(request):
     return render(request, 'noisesearch/home.html', {'points': json_data})
 
 
-# @csrf_exempt
-# def model_form_single(request):
-#     if request.method == 'POST':
-#         form_single = DocumentForm_Single(request.POST, request.FILES)
-#         if form_single.is_valid():
-#             file = form_single.save()
-#             file_name = file.single
-#             print('filename: ', file_name)
-#             handle_uploaded_file(str(file_name))
-#             return render(request, 'noisesearch/form_single.html', {'form_single': form_single})
-#     else:
-#         form_single = DocumentForm_Single()
-#         return render(request, 'noisesearch/form_single.html', {'form_single': form_single, })
-
-
-def get_details(request):
+def get_details_pbs(request):
     indices = request.GET.getlist('ids[]')
     data = []
     for id in indices:
@@ -90,6 +79,31 @@ def get_details(request):
     return HttpResponse(
         returnString,
         content_type="application/text")
+
+1
+
+@login_required
+def get_details_prs(request):
+    indices = request.GET.getlist('ids[]')
+
+    if str(request.user) != PrivateSingleAverage.objects.get(pk=int(indices[0])).user_name:
+        return HttpResponse(
+            "nothing",
+            content_type="application/text"
+        )
+    else:
+        data = []
+        for id in indices:
+            data.append(serializers.serialize('json', PrivateSingleAverage.objects.filter(id=int(id))))
+
+        returnString = ""
+        for element in data:
+            returnString = returnString + element + ', '
+
+        returnString = returnString[:-2]
+        return HttpResponse(
+            returnString,
+            content_type="application/text")
 
 
 @csrf_exempt
@@ -287,10 +301,10 @@ def change_state_single(request):
                 pbsd_object = PublicSingleDetail.objects.filter(measurement_id_id=int(id))
 
                 prs = PrivateSingleAverage(device_id=pbs_object.device_id, latitude=pbs_object.latitude,
-                                          longitude=pbs_object.longitude,
-                                          average_spl=pbs_object.average_spl, duration=pbs_object.duration,
-                                          start_time=pbs_object.start_time,
-                                          end_time=pbs_object.end_time, user_name=pbs_object.user_name)
+                                           longitude=pbs_object.longitude,
+                                           average_spl=pbs_object.average_spl, duration=pbs_object.duration,
+                                           start_time=pbs_object.start_time,
+                                           end_time=pbs_object.end_time, user_name=pbs_object.user_name)
                 prs.save()
 
                 new_ids.append(prs.id)
@@ -299,12 +313,12 @@ def change_state_single(request):
 
                 for ob in pbsd_object:
                     prsd = PrivateSingleDetail(measurement_id_id=prs.id, device_id=ob.device_id, latitude=ob.latitude,
-                                              longitude=ob.longitude, spl_value=ob.spl_value,
-                                              measured_at=ob.measured_at, user_name=ob.user_name)
+                                               longitude=ob.longitude, spl_value=ob.spl_value,
+                                               measured_at=ob.measured_at, user_name=ob.user_name)
                     prsd.save()
                 pbs_object.delete()
                 pbsd_object.delete()
-        # return_data = {'message': 'success', 'ids': new_ids, 'objects': return_objects}
+                # return_data = {'message': 'success', 'ids': new_ids, 'objects': return_objects}
 
     returnString = ""
     for element in return_objects:
@@ -316,9 +330,7 @@ def change_state_single(request):
         content_type="application/text")
 
 
-
-def renderGraphs(request):
-
+def renderGraphsPublic(request):
     spl_values = []
     timestamps = []
 
@@ -341,8 +353,38 @@ def renderGraphs(request):
         content_type='application/json'
     )
 
+
+@login_required
+def renderGraphsPrivate(request):
+    spl_values = []
+    timestamps = []
+
+    objects = PrivateSingleDetail.objects.filter(measurement_id=int(request.GET.get('id')))
+
+    for ob in objects:
+        spl_values.append(ob.spl_value)
+        timestamps.append(ob.measured_at.astimezone())
+
+    # print(timestamps[0])
+
+    return_data = {'spl_values': spl_values, 'timestamps': timestamps}
+
+    return_data = json.dumps(return_data, cls=DjangoJSONEncoder)
+
+    # print(return_data)
+
+    return HttpResponse(
+        return_data,
+        content_type='application/json'
+    )
+
+
+def multiple_map(request):
+    """"""
+    objects = PrivateMultipleAverage.objects.all()
+    return render(request, 'noisesearch/multiple.html', {'object': objects})
+
 def test(request):
     """"""
 
     return render(request, 'noisesearch/test/test.html')
-

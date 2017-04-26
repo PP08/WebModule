@@ -10,6 +10,12 @@ function renderGraphs(width, height) {
         var div_id = $(this).attr('id');
         // alert('url: ' + url);
 
+        if (window.location.href.toString().indexOf("private") > 0){
+            url += '_prs/';
+        }else {
+            url += '_pbs/';
+        }
+
         var str_id = div_id.split('-')[1];
 
         var div_graph = document.getElementById("graphs" + str_id);

@@ -82,3 +82,10 @@ def group_the_points(tobjects):
             data.append({'ids': ids, 'average_spl': average_spl_value, 'latitude': average_latitude,
                          'longitude': average_longitude})
     return data
+
+def cal_distance(points):
+    """"""
+    distance = 0
+    for i in range(len(points) - 1):
+        distance = distance + haversine(points[i][0], points[i][1], points[i + 1][0], points[i + 1][1])
+    return round(distance, 2)

@@ -47,8 +47,20 @@ function addMarkers(points) {
 }
 
 function get_details(clicked_id) {
+
+    var url = "";
+    // if (window.location.url)
+    console.log(window.location.href);
+    var cur_url = window.location.href;
+
+    if(cur_url.indexOf("private") > 0){
+        url = '/get_details_prs/'
+    }else {
+        url = '/get_details_pbs/'
+    }
+
     $.ajax({
-        url: '/get_details/',
+        url: url,
         data: {
             'ids[]': g_points[clicked_id].ids
         },

@@ -114,6 +114,10 @@ $(document).ready(function () {
     });
 
 
+    $("#btn-visualize-pbs").click(function () {
+       visualize_single('pbs', 'publicSingle');
+    });
+
     function visualize_single(tabName, modelName) {
 
         var selected = get_selected_data(tabName);
