@@ -1,0 +1,53 @@
+<div id="pbm_tab" class="col s12">
+    <div class="inner-table z-depth-2">
+        <table class="highlight centered" id="table-pbm">
+            <thead>
+                <tr>
+                    <th><p>
+                        <input type="checkbox" id="checkAllpbm" value="0"/>
+                        <label for="checkAllpbm"></label>
+                    </p></th>
+                    <th>Measured at</th>
+                    <th>Average SPL</th>
+                    <th>Distance</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in public_data_multiple %}
+                    <tr id="row_pbm{{ row.id }}">
+                        <td>
+                            <p>
+                                <input type="checkbox" id="pbm{{ row.id }}" value="{{ row.id }}"/>
+                                <label for="pbm{{ row.id }}"></label>
+                            </p>
+                        </td>
+                        <td><a href="{% url 'get_detail_pbm' pk=row.id %}">{{ row.start_time }}</a></td>
+                        <td>{{ row.average_spl }}</td>
+                        <td>{{ row.distance }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="clear-fix2">
+        <div class="center-div">
+            <div class="col s4">
+                <button class="btn" id="btn-visualize-pbm">Visualize</button>
+            </div>
+        </div>
+
+        <div class="center-div">
+            <div class="col s4">
+                <button class="btn" id="btn-make-private-pbm">Make Private</button>
+            </div>
+        </div>
+
+        <div class="center-div">
+            <div class="col s4">
+                <button class="btn-flat" id="btn-delete-pbm">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

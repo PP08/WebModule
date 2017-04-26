@@ -1,0 +1,54 @@
+<div id="prm_tab" class="col s12">
+    <div class="inner-table z-depth-2">
+        <table class="highlight centered" id="table-prm">
+            <thead>
+                <tr>
+                    <th><p>
+                        <input type="checkbox" id="checkAllPrm" value="0"/>
+                        <label for="checkAllPrm"></label>
+                    </p></th>
+                    <th>Measured at</th>
+                    <th>Average SPL</th>
+                    <th>Distance</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in private_data_multiple %}
+                    <tr id="row_prm{{ row.id }}">
+                        <td>
+                            <p>
+                                <input type="checkbox" id="prm{{ row.id }}" value="{{ row.id }}"/>
+                                <label for="prm{{ row.id }}"></label>
+                            </p>
+                        </td>
+                        <td><a href="{% url 'get_detail_prm' pk=row.id %}">{{ row.start_time }}</a></td>
+                        <td>{{ row.average_spl }}</td>
+                        <td>{{ row.distance }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="clear-fix2">
+        <div class="center-div">
+            <div class="col s4">
+                <button class="btn" id="btn-visualize-prm">Visualize</button>
+            </div>
+        </div>
+
+        <div class="center-div">
+            <div class="col s4">
+                <button class="btn" id="btn-make-public-prm">Make Public</button>
+            </div>
+        </div>
+
+        <div class="center-div">
+            <div class="col s4">
+                <button class="btn-flat" id="btn-delete-prm">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -64,18 +64,14 @@ function get_details(clicked_id) {
         data: {
             'ids[]': g_points[clicked_id].ids
         },
-        dataType: 'text',
+        dataType: 'json',
         success: function (data) {
             if (data) {
-                var string_data = '[' + data + ']'
-
-                var jsonData = JSON.parse(string_data);
-                // console.log(jsonData);
 
                 var myModal = document.getElementById('modal');
                 var modal_template = Handlebars.compile(document.getElementById('modal-template').innerHTML);
 
-                var context = {objects: jsonData};
+                var context = {objects: data};
                 myModal.innerHTML = modal_template(context);
 
                 $('.modal').modal();

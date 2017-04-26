@@ -168,8 +168,8 @@ class PublicMultipleAverage(models.Model):
     """"""
     id = models.AutoField(primary_key=True)
     device_id = models.CharField(max_length=30)
-    start_point = JSONField
-    end_point = JSONField
+    start_point = JSONField()
+    end_point = JSONField()
     average_spl = models.FloatField()
     distance = models.FloatField()
     start_time = models.DateTimeField(default=None)

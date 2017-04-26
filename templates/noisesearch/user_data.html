@@ -15,14 +15,8 @@
 
             {% include 'noisesearch/tabs/_private_single.html' %}
             {% include 'noisesearch/tabs/_public_single.html' %}
-
-            <div id="prm_tab" class="col s12">
-                <p>nothing's here right now</p>
-            </div>
-
-            <div id="pbm_tab" class="col s12">
-                <p>and here, too</p>
-            </div>
+            {% include 'noisesearch/tabs/_private_multiple.html' %}
+            {% include 'noisesearch/tabs/_public_multiple.html' %}
         </div>
     </div>
 {% endblock %}
