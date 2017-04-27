@@ -16,8 +16,16 @@
 }
 
 .modal.bottom-sheet {
-    max-height: 75% !important;
-    height: 75% !important;
+    max-height: 85% !important;
+    height: 85% !important;
+}
+
+#modal-detail-mul {
+    max-height: 50% !important;
+}
+
+#modal-filter, #modal-filter-mul {
+    max-height: 60% !important;
 }
 
 .picker__date-display {

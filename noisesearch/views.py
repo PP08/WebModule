@@ -19,13 +19,23 @@ import ast
 # Create your views here.
 
 def home_page(request):
-
     global average_longitude, average_latitude, average_spl_value, ids, objects, sp_objects
 
+    location = []
     sp_objects = []
 
     if request.GET.get('modelName') == None:
-        objects = PublicSingleAverage.objects.all()
+        print(str(request.user))
+        if str(request.user) == 'AnonymousUser':
+            objects = PublicSingleAverage.objects.all()
+            location = [48.708048, 44.513303]
+        else:
+            objects = PublicSingleAverage.objects.all()
+            first_ob = PublicSingleAverage.objects.filter(user_name=str(request.user)).first()
+            if  first_ob != None:
+                location = [first_ob.latitude, first_ob.longitude]
+            else:
+                location = [48.708048, 44.513303]
     else:
         ids = request.GET.get('values')
         ids = ast.literal_eval(ids)
@@ -33,11 +43,15 @@ def home_page(request):
         # sp_objects = []
         if model_name == 'privateSingle':
             if str(request.user) != PrivateSingleAverage.objects.get(pk=int(ids[0])).user_name:
-                return render(request, 'noisesearch/home.html', {'point': None})
+                return render(request, 'noisesearch/home.html', {'point': None, 'location': location})
             else:
+                location = [PrivateSingleAverage.objects.get(pk=int(ids[0])).latitude,
+                            PrivateSingleAverage.objects.get(pk=int(ids[0])).latitude]
                 for id in ids:
                     sp_objects.append(PrivateSingleAverage.objects.get(pk=int(id)))
         elif model_name == 'publicSingle':
+            location = [PublicSingleAverage.objects.get(pk=int(ids[0])).latitude,
+                        PublicSingleAverage.objects.get(pk=int(ids[0])).latitude]
             for id in ids:
                 sp_objects.append(PublicSingleAverage.objects.get(pk=int(id)))
 
@@ -53,7 +67,7 @@ def home_page(request):
     data = coordinates_helper.group_the_points(tobjects)
     json_data = json.dumps(data)
 
-    return render(request, 'noisesearch/home.html', {'points': json_data})
+    return render(request, 'noisesearch/home.html', {'points': json_data, 'location': location})
 
 
 def get_details_pbs(request):
@@ -226,9 +240,11 @@ def get_detail_prm(request, pk):
     measurements = PrivateMultipleDetail.objects.filter(measurement_id=pk, user_name=str(request.user))
     return render(request, 'noisesearch/details_data.html', {'measurements': measurements})
 
+
 def get_detail_pbm(request, pk):
     measurements = PublicMultipleDetail.objects.filter(measurement_id=pk, user_name=str(request.user))
     return render(request, 'noisesearch/details_data.html', {'measurements': measurements})
+
 
 @login_required
 @csrf_exempt
@@ -287,7 +303,8 @@ def change_state_single(request):
 
                 new_ids.append(pbs.id)
 
-                return_objects.append(json.loads(serializers.serialize("json", PublicSingleAverage.objects.filter(id=pbs.id))))
+                return_objects.append(
+                    json.loads(serializers.serialize("json", PublicSingleAverage.objects.filter(id=pbs.id))))
 
                 for ob in prsd_object:
                     pbsd = PublicSingleDetail(measurement_id_id=pbs.id, device_id=ob.device_id, latitude=ob.latitude,
@@ -313,7 +330,8 @@ def change_state_single(request):
 
                 new_ids.append(prs.id)
 
-                return_objects.append(json.loads(serializers.serialize("json", PrivateSingleAverage.objects.filter(id=prs.id))))
+                return_objects.append(
+                    json.loads(serializers.serialize("json", PrivateSingleAverage.objects.filter(id=prs.id))))
 
                 for ob in pbsd_object:
                     prsd = PrivateSingleDetail(measurement_id_id=prs.id, device_id=ob.device_id, latitude=ob.latitude,
@@ -363,7 +381,8 @@ def change_state_multiple(request):
                 new_ids.append(pbm.id)
 
                 # return_objects.append(serializers.serialize("json", PublicMultipleAverage.objects.get(pk=pbm.id)))
-                return_objects.append(json.loads(serializers.serialize('json', PublicMultipleAverage.objects.filter(id=pbm.id))))
+                return_objects.append(
+                    json.loads(serializers.serialize('json', PublicMultipleAverage.objects.filter(id=pbm.id))))
 
                 for ob in prmd_object:
                     pbsd = PublicMultipleDetail(measurement_id_id=pbm.id, device_id=ob.device_id, latitude=ob.latitude,
@@ -380,21 +399,22 @@ def change_state_multiple(request):
                 pbmd_object = PublicMultipleDetail.objects.filter(measurement_id_id=int(id))
 
                 prm = PrivateMultipleAverage(device_id=pbm_object.device_id,
-                                            start_point=pbm_object.start_point, end_point=pbm_object.end_point,
-                                            average_spl=pbm_object.average_spl, distance=pbm_object.distance,
-                                            start_time=pbm_object.start_time,
-                                            end_time=pbm_object.end_time, user_name=pbm_object.user_name)
+                                             start_point=pbm_object.start_point, end_point=pbm_object.end_point,
+                                             average_spl=pbm_object.average_spl, distance=pbm_object.distance,
+                                             start_time=pbm_object.start_time,
+                                             end_time=pbm_object.end_time, user_name=pbm_object.user_name)
                 prm.save()
 
                 new_ids.append(prm.id)
 
                 # return_objects.append(serializers.serialize("json", PublicMultipleAverage.objects.get(pk=pbm.id)))
-                return_objects.append(json.loads(serializers.serialize('json', PrivateMultipleAverage.objects.filter(id=prm.id))))
+                return_objects.append(
+                    json.loads(serializers.serialize('json', PrivateMultipleAverage.objects.filter(id=prm.id))))
 
                 for ob in pbmd_object:
                     prsd = PrivateMultipleDetail(measurement_id_id=prm.id, device_id=ob.device_id, latitude=ob.latitude,
-                                                longitude=ob.longitude, spl_value=ob.spl_value,
-                                                measured_at=ob.measured_at, user_name=ob.user_name)
+                                                 longitude=ob.longitude, spl_value=ob.spl_value,
+                                                 measured_at=ob.measured_at, user_name=ob.user_name)
                     prsd.save()
                 pbm_object.delete()
                 pbmd_object.delete()
@@ -491,43 +511,21 @@ def renderGraphsPrivate(request):
 
 def multiple_map(request):
     """"""
-    global average_longitude, average_latitude, average_spl_value, ids, objects, sp_objects
+    global average_objects, location, average_values
+    objects = []
 
-    sp_objects = []
+    if  str(request.user) == 'AnonymousUser':
+        average_objects = PublicMultipleAverage.objects.all()
 
-    if request.GET.get('modelName') == None:
-        objects = PublicMultipleAverage.objects.all()
-    else:
-        ids = request.GET.get('values')
-        ids = ast.literal_eval(ids)
-        model_name = request.GET.get('modelName')
-        # sp_objects = []
-        if model_name == 'privateMultiple':
-            if str(request.user) != PrivateMultipleAverage.objects.get(pk=int(ids[0])).user_name:
-                return render(request, 'noisesearch/home.html', {'point': None})
-            else:
-                for id in ids:
-                    sp_objects.append(PrivateMultipleAverage.objects.get(pk=int(id)))
-        elif model_name == 'publicMultiple':
-            for id in ids:
-                sp_objects.append(PublicMultipleAverage.objects.get(pk=int(id)))
+        average_values = serializers.serialize('json', average_objects)
+        for ave_ob in average_objects:
+            objects.append(json.loads(serializers.serialize('json', PublicMultipleDetail.objects.filter(measurement_id_id=ave_ob.id))))
+        # location = [48.708048, 44.513303]
+        location = [48.72287, 44.535913]
+        objects = json.dumps(objects)
 
-    temp = []
+    return render(request, 'noisesearch/multiple.html', {'average_objects': average_values, 'details_objects': objects, 'location': location})
 
-    # if len(sp_objects) == 0:
-    #     for ob in objects:
-    #         temp.append(ob)
-    #     tobjects = temp
-    # else:
-    #     tobjects = sp_objects
-    #
-    # data = coordinates_helper.group_the_points(tobjects)
-    # json_data = json.dumps(data)
-
-    # TODO: visualize private data on map
-
-    return render(request, 'noisesearch/multiple.html', {})
-    # return render(request, 'noisesearch/home.html', {'points': json_data})
 
 
 def test(request):

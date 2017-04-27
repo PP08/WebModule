@@ -1,0 +1,53 @@
+{% verbatim %}
+<script id="modal-template-mul" type="text/template">
+
+    <div id="modal-detail-mul" class="modal bottom-sheet">
+        <div class="modal-content">
+            {{#each values}}
+            <div class="row">
+                <div class="col s12 m6 div-table">
+                    <div class="table-details">
+                        <table class="table highlight table-custom z-depth-2">
+                            <tbody>
+                            <tr>
+                                <td>Average sound pressure level:</td>
+                                <td>{{ fields.average_spl }} dB</td>
+                            </tr>
+                            <tr>
+                                <td>Distance of measurement:</td>
+                                <td>{{ fields.distance }} m</td>
+                            </tr>
+                            <tr>
+                                <td>Start Point:</td>
+                                <td>{{ fields.start_point.latitude }}, {{ fields.start_point.longitude }}</td>
+                            </tr>
+                            <tr>
+                                <td>End Point:</td>
+                                <td>{{ fields.end_point.latitude }}, {{ fields.end_point.longitude }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Device ID:</td>
+                                <td>{{ fields.device_id }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>User name</td>
+                                <td>{{ fields.user_name }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col s12 m5 offset-m1 div-graphs" id="graphss">
+                    <a href="/graphs" class="center-icon" id="graphss"><i class="fa fa-bar-chart fa-2x"
+                                                                          aria-hidden="true"></i>
+                        <p>Load Graph</p></a>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</script>
+{% endverbatim %}

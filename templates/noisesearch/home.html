@@ -21,7 +21,8 @@
         </a>
     </div>
 
-    {% include 'noisesearch/_filter_modal.html' %}
+    {% include 'noisesearch/_filter_modal_sin.html' %}
+    {% include 'noisesearch/_modal.html' %}
 
     <script src="{% static 'js/initialize_map.js' %}"></script>
     <script src="{% static 'js/filter_request.js' %}"></script>
@@ -47,7 +48,10 @@
                 return parseInt(value) + 1;
             });
 
-            initialize_map({{ points|safe }})
+{#            var location = {{ location|safe }};#}
+
+            initialize_map({{ points|safe }}, {{ location|safe }});
+
 
             window.addEventListener("resize", function () {
                 setHeightForMap();

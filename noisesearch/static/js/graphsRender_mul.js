@@ -99,7 +99,7 @@ function renderGraphs(width, height) {
                     height: height,
                     yaxis: {title: "Noise Search"},       // set the y axis title
                     xaxis: {
-                        showgrid: true,                  // remove the x-axis grid lines
+                        showgrid: false,                  // remove the x-axis grid lines
                         tickformat: "%H:%m:%S"              // customize the date format to "month, day"
                     },
                     margin: {                           // update the left, bottom, right, top margin

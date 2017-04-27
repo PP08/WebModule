@@ -5,11 +5,11 @@ var g_points;
 var markers;
 var mymap;
 
-function initialize_map(points) {
+function initialize_map(points, location) {
 
     setHeightForMap();
     g_points = points;
-    mymap = L.map('mapid').setView([48.72305363, 44.53600696], 13);
+    mymap = L.map('mapid').setView(location, 13);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibGFuY2Vsb2Z0MTAwOCIsImEiOiJjajE4OXExcWkwMDRyMzJwcDNsdDIzMzU4In0.1JIG2H6f-CZ572Wmzxm77g', {
         maxZoom: 18,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
