@@ -5,7 +5,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'noisesearch',
-
+        'USER': 'phucphuong',
+        'PASSWORD': '',
+        'PORT': '5342',
     }
 }
 
