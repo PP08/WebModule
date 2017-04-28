@@ -88,10 +88,7 @@ WSGI_APPLICATION = 'WebModule.wsgi.application'
 #         'PORT': '',
 #     }
 # }
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+
 
 DATABASES['default'] = dj_database_url.config()
 
@@ -101,7 +98,10 @@ ALLOWED_HOSTS = ['*']
 
 DEBUG = False
 
-
+try:
+    from .local_settings import *
+except ImportError:
+    pass
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
