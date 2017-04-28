@@ -151,7 +151,7 @@ REST_FRAMEWORK = {
     )
 }
 
-SECRET_KEY = dj_database_url.config('SECRET_KEY')
+SECRET_KEY = dj_database_url.config('zxz^#oy&84n!!35t(i1^!&n+81*#9)su$!b#roc)7h54j4w)6$')
 DEBUG = dj_database_url.config('DEBUG', default=False, cast=bool)
 DATABASES = {
     'default': dj_database_url.config(
