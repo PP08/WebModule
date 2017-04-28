@@ -7,6 +7,7 @@ DATABASES = {
         'NAME': 'noisesearch',
         'USER': 'phucphuong',
         'PASSWORD': '',
+        'HOST': 'localhost',
         'PORT': '5342',
     }
 }
