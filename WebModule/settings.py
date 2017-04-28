@@ -92,11 +92,11 @@ WSGI_APPLICATION = 'WebModule.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'noisesearch',
-        'USER': 'phucphuong',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '5342',
+        # 'NAME': 'noisesearch',
+        # 'USER': 'phucphuong',
+        # 'PASSWORD': '',
+        # 'HOST': 'localhost',
+        # 'PORT': '5342',
     }
 }
 
@@ -154,16 +154,19 @@ REST_FRAMEWORK = {
 }
 
 
-import dj_database_url
-DATABASES['default'] = dj_database_url.config()
-
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
+# # Allow all host hosts/domain names for this site
 ALLOWED_HOSTS = ['*']
 
-DEBUG = False
+# Parse database configuration from $DATABASE_URL
+import dj_database_url
 
+DATABASES = { 'default' : dj_database_url.config()}
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# try to load local_settings.py if it exists
 try:
-    from .lc_settings import *
-except ImportError:
-    pass
+  from .lc_settings import *
+except Exception as e:
+  pass
