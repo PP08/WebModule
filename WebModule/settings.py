@@ -90,9 +90,9 @@ WSGI_APPLICATION = 'WebModule.wsgi.application'
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    # }
 }
 
 
