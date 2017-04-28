@@ -26,7 +26,7 @@ SECRET_KEY = 'zxz^#oy&84n!!35t(i1^!&n+81*#9)su$!b#roc)7h54j4w)6$'
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
-# ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', '192.168.1.43', '172.20.10.13']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', '192.168.1.43', '172.20.10.13']
 
 # Application definition
 
@@ -88,18 +88,11 @@ WSGI_APPLICATION = 'WebModule.wsgi.application'
 #     }
 # }
 
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'noisesearch',
-        # 'USER': 'phucphuong',
-        # 'PASSWORD': '',
-        # 'HOST': 'localhost',
-        # 'PORT': '5342',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -167,6 +160,6 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # try to load local_settings.py if it exists
 try:
-  from .lc_settings import *
+  from .lc_setttings import *
 except Exception as e:
   pass
