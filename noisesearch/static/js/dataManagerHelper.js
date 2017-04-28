@@ -38,6 +38,10 @@ $(document).ready(function () {
         check_all($(this), 'prm');
     });
 
+    $("#checkAllPbm").change(function () {
+        check_all($(this), 'pbm');
+    });
+
     function check_all(checkbox, tabName) {
         if (checkbox.prop('checked')) {
             $('#' + tabName + '_tab :checkbox').each(function () {
@@ -191,7 +195,6 @@ $(document).ready(function () {
 
         var url = '/' + '?modelName=' + modelName + '&values=' + selected_str;
         if (selected.selected_items.length > 0) {
-
             var tab = window.open(url);
             tab.focus();
         }

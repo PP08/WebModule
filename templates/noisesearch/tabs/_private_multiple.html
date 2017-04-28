@@ -22,7 +22,7 @@
                                 <label for="prm{{ row.id }}"></label>
                             </p>
                         </td>
-                        <td><a href="{% url 'get_detail_prm' pk=row.id %}">{{ row.start_time }}</a></td>
+                        <td><a href="{% url 'get_detail_prm' pk=row.id %}">{{ row.start_time|date:"r" }}</a></td>
                         <td>{{ row.average_spl }}</td>
                         <td>{{ row.distance }}</td>
                     </tr>

@@ -31,7 +31,7 @@
                 <tbody>
                 {% for row in measurements %}
                     <tr>
-                        <td class="dateTime">{{ row.measured_at }}</td>
+                        <td>{{ row.measured_at|date:"r" }}</td>
                         <td>{{ row.spl_value }}</td>
                         <td>{{ row.latitude }}</td>
                         <td>{{ row.longitude }}</td>

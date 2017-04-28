@@ -83,6 +83,9 @@ function renderGraphs(width, height) {
 
                 var result_graph = document.getElementById("result-graph" + str_id);
 
+
+                // alert('timestamp: ' + data['timestamps']);
+
                 var trace = {
                     type: 'scatter',                    // set the chart type
                     mode: 'lines',                      // connect points with lines
@@ -99,8 +102,8 @@ function renderGraphs(width, height) {
                     height: height,
                     yaxis: {title: "Noise Search"},       // set the y axis title
                     xaxis: {
-                        showgrid: true,                  // remove the x-axis grid lines
-                        tickformat: "%H:%m:%S"              // customize the date format to "month, day"
+                        showgrid: false                  // remove the x-axis grid lines
+                        // tickformat: "%H:%m:%S"              // customize the date format to "month, day"
                     },
                     margin: {                           // update the left, bottom, right, top margin
                         l: 40, b: 30, r: 10, t: 20

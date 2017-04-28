@@ -29,7 +29,15 @@
     <script src="{% static 'js/graphsRender.js' %}"></script>
 
     <script type="text/javascript">
+
+        global_model_name = '{{ model_name }}';
+        global_ids = {{ ids|safe }};
+
+        console.log(global_ids);
+
         $(document).ready(function () {
+
+
             // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
             $('.modal').modal();
 
@@ -42,13 +50,14 @@
                 selectYears: 15 // Creates a dropdown of 15 years to control year
             });
 
-{#            var Handlebars = require('handlebars');#}
+            {#            var Handlebars = require('handlebars');#}
 
             Handlebars.registerHelper('inc', function (value, options) {
                 return parseInt(value) + 1;
             });
 
-{#            var location = {{ location|safe }};#}
+            {#            var location = {{ location|safe }};#}
+
 
             initialize_map({{ points|safe }}, {{ location|safe }});
 
@@ -59,4 +68,6 @@
 
         });
     </script>
+
+
 {% endblock %}

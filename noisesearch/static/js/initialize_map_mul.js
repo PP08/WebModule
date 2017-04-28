@@ -2,6 +2,7 @@
  * Created by phucphuong on 4/13/17.
  */
 var g_average_values;
+var g_points;
 var markers;
 var trackers;
 var circles;
@@ -10,6 +11,8 @@ var mymap_mul;
 function initialize_map_mul(points, average_values, location) {
 
     g_average_values = average_values;
+    g_points = points;
+
     setHeightForMap();
 
     mymap_mul = L.map('mapid-mul').setView(location, 18);
@@ -39,9 +42,14 @@ function setHeightForMap() {
 }
 
 function addTrackers(points, average_values) {
+
+    // console.log("points lenght " + points.length);
+
     for (var i = 0; i < points.length; i++) {
         var polyline_points = [];
+        // console.log('point ' + i + ' length: ' + points[i].length);
         for (var j = 0; j < points[i].length; j++) {
+
             var point = new L.LatLng(points[i][j]['fields'].latitude, points[i][j]['fields'].longitude);
             polyline_points.push(point);
             var circle = L.circle(point, {
@@ -52,24 +60,24 @@ function addTrackers(points, average_values) {
                 weight: 4
             });
             circle.bindPopup("<p class='center-align'><b>SPL: " + points[i][j]['fields'].spl_value + " dB</b></p><br><div class='center-div'>" +
-            "<button class='btn' id='btn-dtm-"+ i + "' onClick='get_details_multiple(this.id)' >" +
-            "Details</button></div>");
+                "<button class='btn' id='btn-dtm-" + i + "' onClick='get_details_multiple(this.id)' >" +
+                "Details</button></div>");
 
             circles.addLayer(circle);
         }
         // console.log('points: ' + polyline_points);
 
         var start_point_marker = L.marker(polyline_points[0]);
-        var end_point_marker = L.marker(polyline_points[polyline_points.length-1]);
+        var end_point_marker = L.marker(polyline_points[polyline_points.length - 1]);
 
         start_point_marker.bindPopup("<p class='center-align'><b>Start Point</b></p><p class='center-align'>" +
             "Average SPL: " + average_values[i]['fields'].average_spl + " dB</p><br><div class='center-div'>" +
-            "<button class='btn' id='btn-dtm-"+ i + "' onClick='get_details_multiple(this.id)' >" +
+            "<button class='btn' id='btn-dtm-" + i + "' onClick='get_details_multiple(this.id)' >" +
             "Details</button></div>");
 
         end_point_marker.bindPopup("<p class='center-align'><b>End Point</b></p><p class='center-align'>" +
             "Average SPL: " + average_values[i]['fields'].average_spl + " dB</p><br><div class='center-div'>" +
-            "<button class='btn' id='btn-dtm-"+ i + "' onClick='get_details_multiple(this.id)' >" +
+            "<button class='btn' id='btn-dtm-" + i + "' onClick='get_details_multiple(this.id)' >" +
             "Details</button></div>");
 
         markers.addLayer(start_point_marker);
@@ -83,7 +91,7 @@ function addTrackers(points, average_values) {
         });
 
         pathLine.bindPopup("<p class='center-align'><b>Average SPL: " + average_values[i]['fields'].average_spl + " dB</b></p><br><div class='center-div'>" +
-            "<button class='btn' id='btn-dtm-"+ i + "' onClick='get_details_multiple(this.id)' >" +
+            "<button class='btn' id='btn-dtm-" + i + "' onClick='get_details_multiple(this.id)' >" +
             "Details</button></div>");
 
         trackers.addLayer(pathLine);
@@ -101,21 +109,22 @@ function get_details_multiple(btn_id) {
     var modalDetails = document.getElementById('modal-mul');
     var modal_template = Handlebars.compile(document.getElementById('modal-template-mul').innerHTML);
 
-    var context = {values: g_average_values};
+    var context = {values: g_average_values[clicked_id]};
 
-    console.log(g_average_values);
+    // console.log(context);
+
     modalDetails.innerHTML = modal_template(context);
 
     $('.modal').modal();
     $('#modal-detail-mul').modal('open');
 
-}
 
-function random_color() {
-    var color = '#';
-    var letters = ['c2185b', '7b1fa2', '1976d2', '303f9f', '00796b', '0097a7', '0288d1', '388e3c', 'f57c00', 'ffa000']; //Set your colors here
-    color += letters[Math.floor(Math.random() * letters.length)];
+    //set the height
+    var div_table = document.getElementById("table-details-mul");
+    var height = $(div_table).height();
+    var width = $(div_table).width();
+    $("div#graphs-mul").css("height", height);
 
-    return color;
+    renderGraphsMul(width, height, clicked_id);
 }
 

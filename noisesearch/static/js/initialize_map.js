@@ -9,9 +9,9 @@ function initialize_map(points, location) {
 
     setHeightForMap();
     g_points = points;
-    mymap = L.map('mapid').setView(location, 13);
+    mymap = L.map('mapid').setView(location, 15);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibGFuY2Vsb2Z0MTAwOCIsImEiOiJjajE4OXExcWkwMDRyMzJwcDNsdDIzMzU4In0.1JIG2H6f-CZ572Wmzxm77g', {
-        maxZoom: 18,
+        maxZoom: 20,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
         'Imagery © <a href="http://mapbox.com">Mapbox</a>',

@@ -4,8 +4,8 @@
             <thead>
                 <tr>
                     <th><p>
-                        <input type="checkbox" id="checkAllpbm" value="0"/>
-                        <label for="checkAllpbm"></label>
+                        <input type="checkbox" id="checkAllPbm" value="0"/>
+                        <label for="checkAllPbm"></label>
                     </p></th>
                     <th>Measured at</th>
                     <th>Average SPL</th>
@@ -22,7 +22,7 @@
                                 <label for="pbm{{ row.id }}"></label>
                             </p>
                         </td>
-                        <td><a href="{% url 'get_detail_pbm' pk=row.id %}">{{ row.start_time }}</a></td>
+                        <td><a href="{% url 'get_detail_pbm' pk=row.id %}">{{ row.start_time|date:"r" }}</a></td>
                         <td>{{ row.average_spl }}</td>
                         <td>{{ row.distance }}</td>
                     </tr>

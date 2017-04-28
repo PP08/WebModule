@@ -51,9 +51,11 @@
 {#            var location = {{ location|safe }};#}
             var received_data = {{ details_objects|safe }};
 
+
+            console.log(received_data);
 {#            received_data = JSON.parse(received_data);#}
 
-            initialize_map_mul(received_data, {{ average_objects|safe }}, {{ location|safe }});
+            initialize_map_mul({{ details_objects|safe }}, {{ average_objects|safe }}, {{ location|safe }});
 
 {#            console.log(received_data[0]);#}
 

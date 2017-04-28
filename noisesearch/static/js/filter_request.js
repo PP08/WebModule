@@ -2,7 +2,11 @@
  * Created by phucphuong on 4/12/17.
  */
 
+var global_model_name = '';
+var global_ids = [];
+
 $(document).ready(function () {
+
     $("#chx_duration").change(function () {
         var $checkbox = $(this);
         if ($checkbox.prop('checked')) {
@@ -73,17 +77,27 @@ $(document).ready(function () {
     });
 
     function get_data(array) {
+
+        if (global_ids.length > 0){
+            var visualized = true;
+        }else {
+            visualized = false;
+        }
+
+        // alert('model name: ' + global_model_name);
+
         $.ajax({
             url: /data_filter/,
             type: 'POST',
-            data: {'filters': array},
+            data: {'filters': array, 'visualized': visualized, 'ids[]': global_ids, 'modelName': global_model_name},
+            typeData: 'json',
 
             success: function (data) {
                 markers.clearLayers();
 
                 if (data.length > 0) {
                     g_points = data;
-                    addMarkers(data)
+                    addMarkers(data);
                     Materialize.toast("Found " + data.length + " results" , 4000)
                 } else {
                     Materialize.toast(data.message, 4000)

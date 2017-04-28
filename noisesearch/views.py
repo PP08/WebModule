@@ -19,10 +19,17 @@ import ast
 # Create your views here.
 
 def home_page(request):
-    global average_longitude, average_latitude, average_spl_value, ids, objects, sp_objects
+    global average_longitude, average_latitude, average_spl_value, ids, objects, sp_objects, model_name
+
+    ids = []
+    model_name = ''
 
     location = []
     sp_objects = []
+
+    # return_model_name = ''
+    # return_ids = []
+
 
     if request.GET.get('modelName') == None:
         print(str(request.user))
@@ -32,7 +39,7 @@ def home_page(request):
         else:
             objects = PublicSingleAverage.objects.all()
             first_ob = PublicSingleAverage.objects.filter(user_name=str(request.user)).first()
-            if  first_ob != None:
+            if first_ob != None:
                 location = [first_ob.latitude, first_ob.longitude]
             else:
                 location = [48.708048, 44.513303]
@@ -46,12 +53,12 @@ def home_page(request):
                 return render(request, 'noisesearch/home.html', {'point': None, 'location': location})
             else:
                 location = [PrivateSingleAverage.objects.get(pk=int(ids[0])).latitude,
-                            PrivateSingleAverage.objects.get(pk=int(ids[0])).latitude]
+                            PrivateSingleAverage.objects.get(pk=int(ids[0])).longitude]
                 for id in ids:
                     sp_objects.append(PrivateSingleAverage.objects.get(pk=int(id)))
         elif model_name == 'publicSingle':
             location = [PublicSingleAverage.objects.get(pk=int(ids[0])).latitude,
-                        PublicSingleAverage.objects.get(pk=int(ids[0])).latitude]
+                        PublicSingleAverage.objects.get(pk=int(ids[0])).longitude]
             for id in ids:
                 sp_objects.append(PublicSingleAverage.objects.get(pk=int(id)))
 
@@ -67,7 +74,7 @@ def home_page(request):
     data = coordinates_helper.group_the_points(tobjects)
     json_data = json.dumps(data)
 
-    return render(request, 'noisesearch/home.html', {'points': json_data, 'location': location})
+    return render(request, 'noisesearch/home.html', {'points': json_data, 'location': location, 'ids': ids, 'model_name': model_name})
 
 
 def get_details_pbs(request):
@@ -107,6 +114,8 @@ def get_details_prs(request):
 @csrf_exempt
 def data_filter(request):
     # max_duration, min_spl, max_spl, max_date, min_date, objects = None
+
+
     min_duration = None
     max_duration = None
     min_spl = None
@@ -134,7 +143,28 @@ def data_filter(request):
         elif f['name'] == 'max_date':
             max_date = f['value']
 
-    objects = PublicSingleAverage.objects.all()
+    if not request.POST.get('visualized'):
+        objects = PublicSingleAverage.objects.all()
+    else:
+        ids = request.POST.getlist('ids[]')
+        if  len(ids) > 0:
+
+            selected_objects = []
+            model_name = request.POST.get('modelName')
+            if model_name == 'publicSingle':
+                for id in ids:
+                    selected_objects.append(PublicSingleAverage.objects.filter(id=int(id)))
+
+                objects = selected_objects[0] | selected_objects[1]
+                for i in range(2, len(selected_objects)):
+                    objects = objects | selected_objects[i]
+            elif model_name == 'privateSingle':
+                for id in ids:
+                    selected_objects.append(PrivateSingleAverage.objects.filter(id=int(id)))
+
+                objects = selected_objects[0] | selected_objects[1]
+                for i in range(2, len(selected_objects)):
+                    objects = objects | selected_objects[i]
 
     if min_duration != None:
         min_duration = timedelta(minutes=int(min_duration))
@@ -153,14 +183,14 @@ def data_filter(request):
     context = {"message": "No objects match your filter(s)"}
 
     if (len(objects) > 0):
-        objects = serializers.serialize('json', objects)
-        tobjects = json.loads(objects)
+        temp = []
+        for ob in objects:
+            temp.append(ob)
+        tobjects = temp
         data = coordinates_helper.group_the_points(tobjects)
         return_data = json.dumps(data)
     else:
         return_data = json.dumps(context)
-
-    # todo: return data when get null objects
 
     return HttpResponse(
         return_data,
@@ -468,9 +498,10 @@ def renderGraphsPublic(request):
 
     for ob in objects:
         spl_values.append(ob.spl_value)
-        timestamps.append(ob.measured_at.astimezone())
+        timestamps.append(ob.measured_at.astimezone().strftime("%Y-%m-%d %H:%M:%S"))
+        # print(ob.measured_at.astimezone().strftime("%Y-%m-%d %H:%M:%S"))
 
-    # print(timestamps[0])
+    print(timestamps)
 
     return_data = {'spl_values': spl_values, 'timestamps': timestamps}
 
@@ -514,18 +545,32 @@ def multiple_map(request):
     global average_objects, location, average_values
     objects = []
 
-    if  str(request.user) == 'AnonymousUser':
-        average_objects = PublicMultipleAverage.objects.all()
+    average_objects = PublicMultipleAverage.objects.all()
 
-        average_values = serializers.serialize('json', average_objects)
-        for ave_ob in average_objects:
-            objects.append(json.loads(serializers.serialize('json', PublicMultipleDetail.objects.filter(measurement_id_id=ave_ob.id))))
+    print('length: ', len(average_objects))
+
+    average_values = serializers.serialize('json', average_objects)
+    for ave_ob in average_objects:
+        objects.append(
+            json.loads(serializers.serialize('json', PublicMultipleDetail.objects.filter(measurement_id_id=ave_ob.id))))
+
+    objects = json.dumps(objects)
+
+    print('length objects: ', len(objects))
+
+    if str(request.user) == 'AnonymousUser':
+
         # location = [48.708048, 44.513303]
         location = [48.72287, 44.535913]
-        objects = json.dumps(objects)
+    else:
+        first_ob = PublicMultipleAverage.objects.first()
+        if first_ob != None:
+            location = [first_ob.start_point['latitude'], first_ob.start_point['longitude']]
+        else:
+            location = [48.72287, 44.535913]
 
-    return render(request, 'noisesearch/multiple.html', {'average_objects': average_values, 'details_objects': objects, 'location': location})
-
+    return render(request, 'noisesearch/multiple.html',
+                  {'average_objects': average_values, 'details_objects': objects, 'location': location})
 
 
 def test(request):
