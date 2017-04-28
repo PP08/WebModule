@@ -1,1 +1,1 @@
-web: gunicorn WebModule.wsgi
+web: gunicorn WebModule.wsgi --log-file -

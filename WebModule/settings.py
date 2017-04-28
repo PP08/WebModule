@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-# from WebModule.local_settings import DATABASES
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'zxz^#oy&84n!!35t(i1^!&n+81*#9)su$!b#roc)7h54j4w)6$'
+# SECRET_KEY = 'zxz^#oy&84n!!35t(i1^!&n+81*#9)su$!b#roc)7h54j4w)6$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
@@ -88,12 +88,6 @@ WSGI_APPLICATION = 'WebModule.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-    }
-}
-
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
@@ -127,12 +121,23 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
+
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 
 # redirect after login
 LOGIN_REDIRECT_URL = 'home'
@@ -146,20 +151,10 @@ REST_FRAMEWORK = {
     )
 }
 
-
-# # Allow all host hosts/domain names for this site
-ALLOWED_HOSTS = ['*']
-
-# Parse database configuration from $DATABASE_URL
-import dj_database_url
-
-DATABASES = { 'default' : dj_database_url.config()}
-
-# Honor the 'X-Forwarded-Proto' header for request.is_secure()
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# try to load local_settings.py if it exists
-try:
-  from .lc_setttings import *
-except Exception as e:
-  pass
+SECRET_KEY = dj_database_url.config('SECRET_KEY')
+DEBUG = dj_database_url.config('DEBUG', default=False, cast=bool)
+DATABASES = {
+    'default': dj_database_url.config(
+        default=dj_database_url.config('DATABASE_URL')
+    )
+}
