@@ -1,6 +1,5 @@
 dj-database-url==0.4.2
 Django==1.10.6
-django-extensions==1.7.8
 djangorestframework==3.3.3
 gunicorn==19.7.1
 numpy==1.12.1
