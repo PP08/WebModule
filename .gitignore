@@ -95,4 +95,13 @@ ENV/
 # Rope project settings
 .ropeproject
 
-WebModule/settings/local_settings.py
+#WebModule/settings/local_settings.py
+.DS_Store
+.idea/dataSources.local.xml
+.idea/dataSources/
+.idea/workspace.xml
+WebModule/.DS_Store
+noisesearch/.DS_Store
+noisesearch/migrations/.DS_Store
+noisesearch/migrations/0001_initial.py
+noisesearch/static/.DS_Store
