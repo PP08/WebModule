@@ -57,7 +57,7 @@ $(document).ready(function () {
 
     $('#btn-make-public-prs').click(function () {
         change_state_of_data_single('prs', 'privateSingle', '/data_manager/pbs/', 'pbs');
-        console.log("sanity check");
+        //console.log("sanity check");
     });
 
     $('#btn-make-private-pbs').click(function () {
@@ -156,7 +156,7 @@ $(document).ready(function () {
                         });
                     }
 
-                    console.log(data);
+                    //console.log(data);
 
                     for (var j = 0; j < data.length; j++) {
                         $('#table-' + tableName + ' tbody').append('<tr id="row_' + tableName + data[j][0]['pk'] + '">' +
@@ -224,11 +224,11 @@ $(document).ready(function () {
 
         if (selected_items[0] == 0) {
 
-            console.log('enter here');
+            //console.log('enter here');
             selected_items.shift();
         }
 
-        console.log('selected ids' + selected_items[0]);
+        //console.log('selected ids' + selected_items[0]);
 
         if (selected_items.length > 0) {
             for (var i = 0; i < selected_items.length; i++) {
@@ -270,10 +270,10 @@ $(document).ready(function () {
     //
     //                 var string_data = '[' + data + ']'
     //                 var jsonData = JSON.parse(string_data);
-    //                 console.log(jsonData);
+    //                 //console.log(jsonData);
     //
-    //                 console.log(jsonData[0][0]['fields']);
-    //                 console.log(jsonData[0][0]['pk']);
+    //                 //console.log(jsonData[0][0]['fields']);
+    //                 //console.log(jsonData[0][0]['pk']);
     //
     //                 for (var j = 0; j < jsonData.length; j++) {
     //                     $('#table-pbs tbody').append('<tr id="row_pbs' + jsonData[j][0]['pk'] + '">' +

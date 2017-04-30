@@ -33,11 +33,9 @@
         global_model_name = '{{ model_name }}';
         global_ids = {{ ids|safe }};
 
-        console.log(global_ids);
+{#        console.log(global_ids);#}
 
         $(document).ready(function () {
-
-
             // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
             $('.modal').modal();
 
@@ -59,12 +57,16 @@
             {#            var location = {{ location|safe }};#}
 
 
-            initialize_map({{ points|safe }}, {{ location|safe }});
+            var measured_points = {{ points|safe }};
+
+            initialize_map(measured_points, {{ location|safe }});
 
 
             window.addEventListener("resize", function () {
                 setHeightForMap();
             });
+
+            Materialize.toast(measured_points.length + ' points', 4000, 'rounded');
 
         });
     </script>

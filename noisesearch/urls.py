@@ -10,7 +10,9 @@ urlpatterns = [
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^login/$', auth_views.login, {'template_name': 'noisesearch/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': 'home'}, name='logout'),
+    url(r'^profile_manager/$', views.profile_manager, name='profile_manager'),
     url(r'^data_manager/$', views.data_manager, name='data_manager'),
+    url(r'^change_password/$', views.change_password, name='change_password'),
 
     url(r'^data_manager/pbs/(?P<pk>\d+)/$', views.get_detail_pbs, name='get_detail_pbs'),
     url(r'^data_manager/prs/(?P<pk>\d+)/$', views.get_detail_prs, name='get_detail_prs'),

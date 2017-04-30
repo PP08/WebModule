@@ -64,7 +64,7 @@ function renderGraphsMul(width, height, id) {
 
     Plotly.newPlot(result_graph, data, layout, {showLink: false});
 
-    // console.log('global variable' + g_points);
+    // //console.log('global variable' + g_points);
 
     // var trace = {
     //     type: 'scatter',                    // set the chart type

@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import LoginForm
 from django.views.decorators.csrf import csrf_exempt
 from .models import PrivateSingleAverage, PublicSingleAverage, PublicSingleDetail, \
     PrivateSingleDetail, PrivateMultipleAverage, PrivateMultipleDetail, PublicMultipleAverage, PublicMultipleDetail
@@ -9,8 +8,9 @@ from django.http import HttpResponse
 from . import coordinates_helper
 from datetime import timedelta
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 
 from django.core.serializers.json import DjangoJSONEncoder
 import ast
@@ -32,7 +32,7 @@ def home_page(request):
 
 
     if request.GET.get('modelName') == None:
-        print(str(request.user))
+        ##print(str(request.user))
         if str(request.user) == 'AnonymousUser':
             objects = PublicSingleAverage.objects.all()
             location = [48.708048, 44.513303]
@@ -127,7 +127,7 @@ def data_filter(request):
     filters = request.POST.get('filters')
     filters = json.loads(filters)
 
-    # print(filters)
+    # ##print(filters)
 
     for f in filters:
         if f['name'] == 'min_duration':
@@ -143,12 +143,12 @@ def data_filter(request):
         elif f['name'] == 'max_date':
             max_date = f['value']
 
-    # print(max_duration)
+    # ##print(max_duration)
 
-    # print(request.POST.get('visualized'))
+    # ##print(request.POST.get('visualized'))
 
     if  request.POST.get('visualized') == 'false':
-        # print('here')
+        # ##print('here')
         objects = PublicSingleAverage.objects.all()
     else:
         ids = request.POST.getlist('ids[]')
@@ -222,7 +222,7 @@ def signup(request):
 def data_manager(request):
     current_user = request.user
 
-    # print(current_user.id)
+    # ##print(current_user.id)
 
     private_data_single = PrivateSingleAverage.objects.filter(user_name=current_user)
     public_data_single = PublicSingleAverage.objects.filter(user_name=current_user)
@@ -234,33 +234,52 @@ def data_manager(request):
                    'private_data_multiple': private_data_multiple, 'public_data_multiple': public_data_multiple, })
 
 
-def user_login(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
+# def user_login(request):
+#     if request.method == 'POST':
+#         form = LoginForm(request.POST)
+#         if form.is_valid():
+#             cd = form.cleaned_data
+#             user = authenticate(username=cd['username'], password=cd['password'])
+#             if user is not None:
+#                 if user.is_active:
+#                     login(request, user)
+#                     return HttpResponse('Authenticated successfully')
+#                 else:
+#                     return HttpResponse('disabled account')
+#
+#             else:
+#                 return HttpResponse('Invalid login')
+#     else:
+#         form = LoginForm()
+#
+#     return render(request, 'noisesearch/login.html', {'form': form})
+
+@login_required
+def profile_manager(request):
+    return render(request, 'noisesearch/profile_manager.html', {'user': request.user})
+
+@login_required
+def change_password(request):
+
+    if  request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        # ##print(form)
         if form.is_valid():
-            cd = form.cleaned_data
-            user = authenticate(username=cd['username'], password=cd['password'])
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return HttpResponse('Authenticated successfully')
-                else:
-                    return HttpResponse('disabled account')
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return render(request, 'noisesearch/profile_manager.html', {'user': request.user, 'message': 'Your password is update!'})
+        else:
+            return render(request, 'noisesearch/change_password.html', {'form': form})
 
-            else:
-                return HttpResponse('Invalid login')
-    else:
-        form = LoginForm()
-
-    return render(request, 'noisesearch/login.html', {'form': form})
-
+    form = PasswordChangeForm(user=request.user)
+    return render(request, 'noisesearch/change_password.html', {'form': form})
 
 def get_detail_pbs(request, pk):
     # measurement = get_object_or_404(PublicSingleDetail, measurement_id=pk)
 
     measurements = PublicSingleDetail.objects.filter(measurement_id=pk).order_by('measured_at')
 
-    print(measurements[0].measured_at)
+    ##print(measurements[0].measured_at)
     return render(request, 'noisesearch/details_data.html', {'measurements': measurements})
 
 
@@ -454,7 +473,7 @@ def change_state_multiple(request):
                 pbm_object.delete()
                 pbmd_object.delete()
 
-    print(return_objects)
+    ##print(return_objects)
 
     return_objects = json.dumps(return_objects)
 
@@ -504,15 +523,15 @@ def renderGraphsPublic(request):
     for ob in objects:
         spl_values.append(ob.spl_value)
         timestamps.append(ob.measured_at.astimezone().strftime("%Y-%m-%d %H:%M:%S"))
-        # print(ob.measured_at.astimezone().strftime("%Y-%m-%d %H:%M:%S"))
+        # ##print(ob.measured_at.astimezone().strftime("%Y-%m-%d %H:%M:%S"))
 
-    print(timestamps)
+    ##print(timestamps)
 
     return_data = {'spl_values': spl_values, 'timestamps': timestamps}
 
     return_data = json.dumps(return_data, cls=DjangoJSONEncoder)
 
-    # print(return_data)
+    # ##print(return_data)
 
     return HttpResponse(
         return_data,
@@ -531,13 +550,13 @@ def renderGraphsPrivate(request):
         spl_values.append(ob.spl_value)
         timestamps.append(ob.measured_at.astimezone())
 
-    # print(timestamps[0])
+    # ##print(timestamps[0])
 
     return_data = {'spl_values': spl_values, 'timestamps': timestamps}
 
     return_data = json.dumps(return_data, cls=DjangoJSONEncoder)
 
-    # print(return_data)
+    # ##print(return_data)
 
     return HttpResponse(
         return_data,
@@ -552,7 +571,7 @@ def multiple_map(request):
 
     average_objects = PublicMultipleAverage.objects.all()
 
-    print('length: ', len(average_objects))
+    ##print('length: ', len(average_objects))
 
     average_values = serializers.serialize('json', average_objects)
     for ave_ob in average_objects:
@@ -561,7 +580,7 @@ def multiple_map(request):
 
     objects = json.dumps(objects)
 
-    print('length objects: ', len(objects))
+    ##print('length objects: ', len(objects))
 
     if str(request.user) == 'AnonymousUser':
 
@@ -580,5 +599,4 @@ def multiple_map(request):
 
 def test(request):
     """"""
-
     return render(request, 'noisesearch/test/test.html')

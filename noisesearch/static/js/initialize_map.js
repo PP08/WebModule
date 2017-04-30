@@ -20,7 +20,6 @@ function initialize_map(points, location) {
 
     markers = new L.FeatureGroup();
     addMarkers(points);
-
 }
 
 function setHeightForMap() {
@@ -50,7 +49,7 @@ function get_details(clicked_id) {
 
     var url = "";
     // if (window.location.url)
-    console.log(window.location.href);
+    // console.log(window.location.href);
     var cur_url = window.location.href;
 
     if(cur_url.indexOf("private") > 0){

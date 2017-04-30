@@ -1,0 +1,28 @@
+{% extends 'noisesearch/base.html' %}
+
+{% block content %}
+
+    <div class="container">
+
+        <h4 class="center-align">Your informations</h4>
+
+        <p class="center-align">User name: <strong>{{ user.username }}</strong></p>
+        <div class="center-div">
+            <a href="{% url 'change_password' %}" class="btn">Update password</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+
+        $(document).ready(function () {
+            var message = '{{ message }}';
+
+            if (message.length > 0){
+                Materialize.toast(message, 4000, 'rounded');
+            }
+        });
+
+    </script>
+{% endblock %}
