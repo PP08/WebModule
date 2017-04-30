@@ -143,7 +143,12 @@ def data_filter(request):
         elif f['name'] == 'max_date':
             max_date = f['value']
 
-    if not request.POST.get('visualized'):
+    # print(max_duration)
+
+    # print(request.POST.get('visualized'))
+
+    if  request.POST.get('visualized') == 'false':
+        # print('here')
         objects = PublicSingleAverage.objects.all()
     else:
         ids = request.POST.getlist('ids[]')
