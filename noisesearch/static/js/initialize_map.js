@@ -10,13 +10,14 @@ function initialize_map(points, location) {
     setHeightForMap();
     g_points = points;
     mymap = L.map('mapid').setView(location, 15);
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibGFuY2Vsb2Z0MTAwOCIsImEiOiJjajE4OXExcWkwMDRyMzJwcDNsdDIzMzU4In0.1JIG2H6f-CZ572Wmzxm77g', {
+    layout = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibGFuY2Vsb2Z0MTAwOCIsImEiOiJjajE4OXExcWkwMDRyMzJwcDNsdDIzMzU4In0.1JIG2H6f-CZ572Wmzxm77g', {
         maxZoom: 20,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
         'Imagery © <a href="http://mapbox.com">Mapbox</a>',
         id: 'mapbox.streets'
-    }).addTo(mymap);
+    });
+    layout.addTo(mymap);
 
     markers = new L.FeatureGroup();
     addMarkers(points);
@@ -52,9 +53,9 @@ function get_details(clicked_id) {
     // console.log(window.location.href);
     var cur_url = window.location.href;
 
-    if(cur_url.indexOf("private") > 0){
+    if (cur_url.indexOf("private") > 0) {
         url = '/get_details_prs/'
-    }else {
+    } else {
         url = '/get_details_pbs/'
     }
 

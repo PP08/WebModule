@@ -83,6 +83,7 @@
 
 .brand-logo {
     margin-left: 20px;
+    margin-top: 5px;
 }
 
 .table-custom {
@@ -97,4 +98,22 @@
     /*background: white;*/
     text-align: center;
     color: white;
+}
+
+.ns-logo {
+    width: 55px;
+    height: 55px;
+}
+
+nav {
+    background-color: #FD8A80;
+    /*background-color: #ffffff;*/
+}
+
+nav ul a {
+    /*color: #FD8A80;*/
+}
+.site-name {
+    margin-left: 85px;
+    font-size: 18pt;
 }

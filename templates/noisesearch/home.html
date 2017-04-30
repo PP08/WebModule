@@ -33,7 +33,7 @@
         global_model_name = '{{ model_name }}';
         global_ids = {{ ids|safe }};
 
-{#        console.log(global_ids);#}
+        {#        console.log(global_ids);#}
 
         $(document).ready(function () {
             // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
@@ -63,8 +63,16 @@
 
 
             window.addEventListener("resize", function () {
+                console.log('triggered');
                 setHeightForMap();
+                {#                setTimeout(function () {#}
+                {#                    mymap.invalidateSize()#}
+                {#                }, 1000);#}
             });
+
+            {#            new ResizeSensor(jQuery('#mapid'), function () {#}
+            {#                console.log('myelement has been resized');#}
+            {#            });#}
 
             Materialize.toast(measured_points.length + ' points', 4000, 'rounded');
 

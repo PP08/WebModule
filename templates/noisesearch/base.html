@@ -20,6 +20,7 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
         <link rel="stylesheet" href="{% static 'css/noisesearch/style.css' %}">
+{#        <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">#}
         <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
     </head>
     <body>
@@ -35,8 +36,14 @@
 
         <nav>
             <div class="nav-wrapper" id="top-nav-bar">
-                <a href="{% url 'home' %}" class="brand-logo">Noise Search</a>
+{#                <a href="{% url 'home' %}" class="brand-logo ns-logo"><img src="{% static 'img/ns-logo-mini.svg' %}"></a>#}
+
+                <a href="{% url 'home' %}" class="brand-logo"><img class="ns-logo" src="{% static 'img/ns-logo-mini.svg' %}" alt="logo"></a>
+
+                <a href="{% url 'home'%}" class="site-name">Noise search</a>
+
                 <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+
                 <ul class="right hide-on-med-and-down">
                     <li id="home-page"><a href="{% url 'home' %}">Single Point</a></li>
                     <li id="multiple-page"><a href="{% url 'multiple_map' %}">Multiple Points</a></li>
