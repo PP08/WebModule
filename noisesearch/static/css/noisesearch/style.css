@@ -118,3 +118,7 @@ nav ul a {
     margin-left: 70px;
     font-size: 18pt;
 }
+
+#btn-filter-trigger {
+    background-color: #FD8A80 !important;
+}
