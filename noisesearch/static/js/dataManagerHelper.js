@@ -174,9 +174,7 @@ $(document).ready(function () {
 
 
     $("#btn-visualize-prs").click(function () {
-
         visualize_single('prs', 'privateSingle');
-
     });
 
     $("#btn-visualize-pbs").click(function () {
@@ -185,6 +183,10 @@ $(document).ready(function () {
 
     $("#btn-visualize-prm").click(function () {
         visualize_multiple('prm', 'privateMultiple');
+    });
+
+    $("#btn-visualize-pbm").click(function () {
+        visualize_multiple('pbm', 'publicMultiple');
     });
 
     function visualize_single(tabName, modelName) {
@@ -205,6 +207,8 @@ $(document).ready(function () {
         var selected = get_selected_data(tabName);
 
         var selected_str = JSON.stringify(selected.selected_items);
+
+        console.log(selected_str);
 
         var url = '/multiple/' + '?modelName=' + modelName + '&values=' + selected_str;
         if (selected.selected_items.length > 0) {

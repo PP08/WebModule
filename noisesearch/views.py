@@ -74,7 +74,8 @@ def home_page(request):
     data = coordinates_helper.group_the_points(tobjects)
     json_data = json.dumps(data)
 
-    return render(request, 'noisesearch/home.html', {'points': json_data, 'location': location, 'ids': ids, 'model_name': model_name})
+    return render(request, 'noisesearch/home.html',
+                  {'points': json_data, 'location': location, 'ids': ids, 'model_name': model_name})
 
 
 def get_details_pbs(request):
@@ -147,12 +148,12 @@ def data_filter(request):
 
     # ##print(request.POST.get('visualized'))
 
-    if  request.POST.get('visualized') == 'false':
+    if request.POST.get('visualized') == 'false':
         # ##print('here')
         objects = PublicSingleAverage.objects.all()
     else:
         ids = request.POST.getlist('ids[]')
-        if  len(ids) > 0:
+        if len(ids) > 0:
 
             selected_objects = []
             model_name = request.POST.get('modelName')
@@ -258,21 +259,23 @@ def data_manager(request):
 def profile_manager(request):
     return render(request, 'noisesearch/profile_manager.html', {'user': request.user})
 
+
 @login_required
 def change_password(request):
-
-    if  request.method == 'POST':
+    if request.method == 'POST':
         form = PasswordChangeForm(data=request.POST, user=request.user)
         # ##print(form)
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
-            return render(request, 'noisesearch/profile_manager.html', {'user': request.user, 'message': 'Your password is update!'})
+            return render(request, 'noisesearch/profile_manager.html',
+                          {'user': request.user, 'message': 'Your password is update!'})
         else:
             return render(request, 'noisesearch/change_password.html', {'form': form})
 
     form = PasswordChangeForm(user=request.user)
     return render(request, 'noisesearch/change_password.html', {'form': form})
+
 
 def get_detail_pbs(request, pk):
     # measurement = get_object_or_404(PublicSingleDetail, measurement_id=pk)
@@ -566,32 +569,70 @@ def renderGraphsPrivate(request):
 
 def multiple_map(request):
     """"""
-    global average_objects, location, average_values
+    global average_objects, location, average_values, objects
     objects = []
+    if request.GET.get('modelName') == None:
+        average_objects = PublicMultipleAverage.objects.all()
+        average_values = serializers.serialize('json', average_objects)
 
-    average_objects = PublicMultipleAverage.objects.all()
+        print(average_values)
 
-    ##print('length: ', len(average_objects))
-
-    average_values = serializers.serialize('json', average_objects)
-    for ave_ob in average_objects:
-        objects.append(
-            json.loads(serializers.serialize('json', PublicMultipleDetail.objects.filter(measurement_id_id=ave_ob.id))))
-
-    objects = json.dumps(objects)
-
-    ##print('length objects: ', len(objects))
-
-    if str(request.user) == 'AnonymousUser':
-
-        # location = [48.708048, 44.513303]
-        location = [48.72287, 44.535913]
-    else:
-        first_ob = PublicMultipleAverage.objects.first()
-        if first_ob != None:
-            location = [first_ob.start_point['latitude'], first_ob.start_point['longitude']]
-        else:
+        if str(request.user) == 'AnonymousUser':
             location = [48.72287, 44.535913]
+        else:
+            first_ob = PublicMultipleAverage.objects.filter(user_name=str(request.user)).first()
+            if first_ob != None:
+                location = [first_ob.start_point['latitude'], first_ob.start_point['longitude']]
+            else:
+                location = [48.72287, 44.535913]
+
+        for ave_ob in average_objects:
+            objects.append(
+                json.loads(
+                    serializers.serialize('json', PublicMultipleDetail.objects.filter(measurement_id_id=ave_ob.id))))
+
+    else:
+        ids = request.GET.get('values')
+        ids = ast.literal_eval(ids)
+        model_name = request.GET.get('modelName')
+        if model_name == 'privateMultiple':
+            if str(request.user) != PrivateMultipleAverage.objects.get(pk=int(ids[0])).user_name:
+                average_values = []
+                objects = []
+                location = [48.72287, 44.535913]
+
+            else:
+                location = [PrivateMultipleAverage.objects.get(pk=int(ids[0])).start_point['latitude'],
+                            PrivateMultipleAverage.objects.get(pk=int(ids[0])).start_point['longitude']]
+
+                # get details objects here
+                temp = []
+                for id in ids:
+                    temp.append(PrivateMultipleAverage.objects.get(pk=int(id)))
+                    objects.append(json.loads(serializers.serialize('json', PrivateMultipleDetail.objects.filter(
+                        measurement_id_id=int(id)))))
+
+                temp = json.loads(serializers.serialize('json', temp))
+                average_values = json.dumps(temp)
+
+        elif model_name == 'publicMultiple':
+            if str(request.user) != PublicMultipleAverage.objects.get(pk=int(ids[0])).user_name:
+                average_values = []
+                objects = []
+                location = [48.72287, 44.535913]
+            else:
+                location = [PublicMultipleAverage.objects.get(pk=int(ids[0])).start_point['latitude'],
+                            PublicMultipleAverage.objects.get(pk=int(ids[0])).start_point['longitude']]
+
+                # get details objects here
+                temp = []
+                for id in ids:
+                    temp.append(PublicMultipleAverage.objects.get(pk=int(id)))
+                    objects.append(json.loads(serializers.serialize('json', PublicMultipleDetail.objects.filter(
+                        measurement_id_id=int(id)))))
+
+                temp = json.loads(serializers.serialize('json', temp))
+                average_values = json.dumps(temp)
 
     return render(request, 'noisesearch/multiple.html',
                   {'average_objects': average_values, 'details_objects': objects, 'location': location})

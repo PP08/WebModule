@@ -83,7 +83,7 @@
 
 .brand-logo {
     margin-left: 20px;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 .table-custom {
@@ -101,12 +101,13 @@
 }
 
 .ns-logo {
-    width: 55px;
-    height: 55px;
+    width: 44px;
+    height: 44px;
 }
 
 nav {
     background-color: #FD8A80;
+    /*background-color: #EE2B2A;*/
     /*background-color: #ffffff;*/
 }
 
@@ -114,6 +115,6 @@ nav ul a {
     /*color: #FD8A80;*/
 }
 .site-name {
-    margin-left: 85px;
+    margin-left: 70px;
     font-size: 18pt;
 }
