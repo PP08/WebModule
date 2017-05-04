@@ -34,14 +34,14 @@ $(document).ready(function () {
         }
     });
 
-    $("#chx_time").change(function () {
-        var $checkbox = $(this);
-        if ($checkbox.prop('checked')) {
-            $("#time_values :input").attr("disabled", false);
-        } else {
-            $("#time_values :input").attr("disabled", true);
-        }
-    });
+    // $("#chx_time").change(function () {
+    //     var $checkbox = $(this);
+    //     if ($checkbox.prop('checked')) {
+    //         $("#time_values :input").attr("disabled", false);
+    //     } else {
+    //         $("#time_values :input").attr("disabled", true);
+    //     }
+    // });
 
     $("form :input").change(function () {
         $("#btn-apply").removeClass("disabled");

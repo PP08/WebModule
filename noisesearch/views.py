@@ -116,7 +116,6 @@ def get_details_prs(request):
 def data_filter(request):
     # max_duration, min_spl, max_spl, max_date, min_date, objects = None
 
-
     min_duration = None
     max_duration = None
     min_spl = None
@@ -203,6 +202,109 @@ def data_filter(request):
         content_type="application/json"
     )
 
+@csrf_exempt
+def data_filter_mul(request):
+    min_distance = None
+    max_distance = None
+    min_spl = None
+    max_spl = None
+    min_date = None
+    max_date = None
+    model_name = ''
+    global  detail_objects
+    objects_filter_mul = None
+    detail_objects = []
+
+    filters = request.POST.get('filters')
+    filters = json.loads(filters)
+
+    for f in filters:
+        if f['name'] == 'min_distance':
+            min_distance = f['value']
+        elif f['name'] == 'max_distance':
+            max_distance = f['value']
+        elif f['name'] == 'min_spl':
+            min_spl = f['value']
+        elif f['name'] == 'max_spl':
+            max_spl = f['value']
+        elif f['name'] == 'min_date':
+            min_date = f['value']
+        elif f['name'] == 'max_date':
+            max_date = f['value']
+
+    # print(min_distance, " ,", max_distance)
+    # print(request.POST.get('visualized'))
+
+
+    if request.POST.get('visualized') == 'false':
+        # ##print('here')
+        # objects = PublicMultipleDetail.objects.all()
+        objects_filter_mul = PublicMultipleAverage.objects.all()
+        model_name = 'publicMultiple'
+
+    else:
+        ids = request.POST.getlist('ids[]')
+
+        if len(ids) > 0:
+            selected_objects = []
+            model_name = request.POST.get('modelName')
+            # print(model_name)
+
+            if model_name == 'publicMultiple':
+                for id in ids:
+                    selected_objects.append(PublicMultipleAverage.objects.filter(id=int(id)))
+
+                objects_filter_mul = selected_objects[0] | selected_objects[1]
+                for i in range(2, len(selected_objects)):
+                    objects_filter_mul = objects_filter_mul | selected_objects[i]
+            elif model_name == 'privateMultiple':
+                for id in ids:
+                    selected_objects.append(PrivateMultipleAverage.objects.filter(id=int(id)))
+
+                objects_filter_mul = selected_objects[0] | selected_objects[1]
+                for i in range(2, len(selected_objects)):
+                    objects_filter_mul = objects_filter_mul | selected_objects[i]
+
+    if min_distance != None:
+        objects_filter_mul = objects_filter_mul.filter(distance__gte=int(min_distance)).filter(distance__lte=int(max_distance))
+
+    if (min_spl != None):
+        objects_filter_mul = objects_filter_mul.filter(average_spl__gte=int(min_spl)).filter(average_spl__lte=int(max_spl))
+
+    if (min_date != None):
+        min_date = coordinates_helper.convert_date_time(min_date)
+        max_date = coordinates_helper.convert_date_time(max_date)
+        objects_filter_mul = objects_filter_mul.filter(start_time__gte=min_date).filter(start_time__lte=max_date)
+
+    context = {"message": "No objects match your filter(s)"}
+
+    if (len(objects_filter_mul) > 0):
+
+        average_objects = json.loads(serializers.serialize('json', objects_filter_mul))
+        # average_objects = json.dumps(average_objects)
+        print(average_objects)
+
+        # print(average_objects[0]['pk'])
+
+        if model_name == 'privateMultiple':
+            for ob in average_objects:
+                print(ob['pk'])
+                detail_objects.append(json.loads(serializers.serialize('json', PrivateMultipleDetail.objects.filter(
+                    measurement_id_id=ob['pk']))))
+        elif model_name == 'publicMultiple':
+            for ob in average_objects:
+                detail_objects.append(json.loads(serializers.serialize('json', PublicMultipleDetail.objects.filter(
+                    measurement_id_id=ob['pk']))))
+
+        return_data = {'average_objects': average_objects, 'detail_objects': detail_objects}
+        return_data = json.dumps(return_data)
+    else:
+        return_data = json.dumps(context)
+
+    return HttpResponse(
+        return_data,
+        content_type="application/json"
+    )
 
 def signup(request):
     if request.method == 'POST':
@@ -569,13 +671,16 @@ def renderGraphsPrivate(request):
 
 def multiple_map(request):
     """"""
-    global average_objects, location, average_values, objects
+    global average_objects, location, average_values, objects, model_name
     objects = []
+    ids = []
+    model_name = ''
+
     if request.GET.get('modelName') == None:
         average_objects = PublicMultipleAverage.objects.all()
         average_values = serializers.serialize('json', average_objects)
-
-        print(average_values)
+        model_name = 'publicMultiple'
+        # print(average_values)
 
         if str(request.user) == 'AnonymousUser':
             location = [48.72287, 44.535913]
@@ -634,8 +739,10 @@ def multiple_map(request):
                 temp = json.loads(serializers.serialize('json', temp))
                 average_values = json.dumps(temp)
 
+    print(model_name)
+
     return render(request, 'noisesearch/multiple.html',
-                  {'average_objects': average_values, 'details_objects': objects, 'location': location})
+                  {'average_objects': average_values, 'details_objects': objects, 'location': location, 'model_name': model_name, 'ids': ids})
 
 
 def test(request):

@@ -23,6 +23,9 @@ class PrivateSingle(APIView):
             # TODO: get data from file and add to the database
             file_path = settings.MEDIA_ROOT + serializer.data['file'][6:]
 
+
+            # print(file_path)
+
             save_private_data_single(file_path, str(request.user))
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)

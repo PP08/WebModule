@@ -2,45 +2,49 @@
  * Created by phucphuong on 4/12/17.
  */
 
+var global_model_name = '';
+var global_ids = [];
+
 $(document).ready(function () {
-    $("#chx_duration").change(function () {
+
+    $("#chx_distance_mul").change(function () {
         var $checkbox = $(this);
         if ($checkbox.prop('checked')) {
-            $("#duration_values :input").attr("disabled", false);
+            $("#distance_values_mul :input").attr("disabled", false);
         } else {
-            $("#duration_values :input").attr("disabled", true);
+            $("#distance_values_mul :input").attr("disabled", true);
         }
     });
 
-    $("#chx_spl_value").change(function () {
+    $("#chx_spl_value_mul").change(function () {
         var $checkbox = $(this);
         if ($checkbox.prop('checked')) {
-            $("#spl_values :input").attr("disabled", false);
+            $("#spl_values_mul :input").attr("disabled", false);
         } else {
-            $("#spl_values :input").attr("disabled", true);
+            $("#spl_values_mul :input").attr("disabled", true);
         }
     });
 
-    $("#chx_date").change(function () {
+    $("#chx_date_mul").change(function () {
         var $checkbox = $(this);
         if ($checkbox.prop('checked')) {
-            $("#date_values :input").attr("disabled", false);
+            $("#date_values_mul :input").attr("disabled", false);
         } else {
-            $("#date_values :input").attr("disabled", true);
+            $("#date_values_mul :input").attr("disabled", true);
         }
     });
 
-    $("#chx_time").change(function () {
-        var $checkbox = $(this);
-        if ($checkbox.prop('checked')) {
-            $("#time_values :input").attr("disabled", false);
-        } else {
-            $("#time_values :input").attr("disabled", true);
-        }
-    });
+    // $("#chx_time").change(function () {
+    //     var $checkbox = $(this);
+    //     if ($checkbox.prop('checked')) {
+    //         $("#time_values_mul :input").attr("disabled", false);
+    //     } else {
+    //         $("#time_values_mul :input").attr("disabled", true);
+    //     }
+    // });
 
     $("form :input").change(function () {
-        $("#btn-apply").removeClass("disabled");
+        $("#btn-apply-mul").removeClass("disabled");
     });
 
     function validate(array) {
@@ -53,15 +57,15 @@ $(document).ready(function () {
         return true;
     }
 
-    $("form#filter-form").submit(function () {
+    $("form#filter-form-mul").submit(function () {
         event.preventDefault();
         var filterArray = $(this).serializeArray();
         // raise_toast(filterArray);
 
         if (validate(filterArray)) {
-            $("#btn-apply").addClass("disabled");
+            $("#btn-apply-mul").addClass("disabled");
             $('.modal').modal();
-            $('#modal-filter').modal('close');
+            $('#modal-filter-mul').modal('close');
 
             filtersJson = JSON.stringify(filterArray);
 
@@ -73,20 +77,40 @@ $(document).ready(function () {
     });
 
     function get_data(array) {
+
+        if (global_ids.length > 0) {
+            var visualized = true;
+        } else {
+            visualized = false;
+        }
+
+        //console.log(global_ids);
+        // alert('model name: ' + global_model_name);
+
         $.ajax({
-            url: /data_filter/,
+            url: /data_filter_mul/,
             type: 'POST',
-            data: {'filters': array},
+            data: {'filters': array, 'visualized': visualized, 'ids[]': global_ids, 'modelName': global_model_name},
+            typeData: 'json',
 
             success: function (data) {
+                circles.clearLayers();
+                trackers.clearLayers();
                 markers.clearLayers();
 
-                if (data.length > 0) {
-                    g_points = data;
-                    addMarkers(data)
-                    Materialize.toast("Found " + data.length + " results" , 4000)
-                } else {
+
+                if (data['message']) {
+
                     Materialize.toast(data.message, 4000)
+
+                } else {
+                    g_average_values = data['average_objects'];
+                    g_points = data['detail_objects'];
+                    console.log(g_points);
+
+                    addTrackers(g_points, g_average_values);
+                    Materialize.toast("Found " + g_average_values.length + " results" , 4000)
+
                 }
             }
         });

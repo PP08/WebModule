@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^get_details_pbs/$', views.get_details_pbs, name='get_details'),
     url(r'^get_details_prs/$', views.get_details_prs, name='get_details'),
     url(r'^data_filter/$', views.data_filter, name='data_filter'),
+    url(r'^data_filter_mul/$', views.data_filter_mul, name='data_filter_mul'),
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^login/$', auth_views.login, {'template_name': 'noisesearch/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': 'home'}, name='logout'),

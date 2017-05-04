@@ -29,6 +29,12 @@
     <script src="{% static 'js/graphsRender_mul.js' %}"></script>
 
     <script type="text/javascript">
+
+        global_model_name = '{{ model_name }}';
+        global_ids = {{ ids|safe }};
+
+        console.log(global_model_name);
+
         $(document).ready(function () {
             // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
             $('.modal').modal();
