@@ -301,6 +301,8 @@ def data_filter_mul(request):
     else:
         return_data = json.dumps(context)
 
+    # TODO: return location - appropriate with the first matched result
+
     return HttpResponse(
         return_data,
         content_type="application/json"
