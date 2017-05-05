@@ -198,17 +198,35 @@ class PublicMultipleDetail(models.Model):
 
     class Meta:
         db_table = "Public_multiple_detail"
-# class Table_single(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     measurement_id = models.ForeignKey(Sum_measurement_single, on_delete=models.CASCADE)
-#     device_id = models.CharField(max_length=30)
-#     latitude = models.FloatField()
-#     longitude = models.FloatField()
-#     spl_value = models.FloatField()
-#     measured_at = models.DateTimeField(default=None)
-#
-#     def __str__(self):
-#         return str(self.measured_at)
-#
-#     class Meta:
-#         db_table = "single_measurement"
+
+
+class TimeFilterPublicSingle(models.Model):
+    id = models.AutoField(primary_key=True)
+    measurement_id = models.ForeignKey(PublicSingleAverage, on_delete=models.CASCADE)
+    h0_h5 = models.FloatField()
+    h5_h10 = models.FloatField()
+    h10_h15 = models.FloatField()
+    h15_h20 = models.FloatField()
+    h20_h24 = models.FloatField()
+
+    def __str__(self):
+        return self.measurement_id
+
+    class Meta:
+        db_table = "Time_filter_public_single"
+
+
+class TimeFilterPrivateSingle(models.Model):
+    id = models.AutoField(primary_key=True)
+    measurement_id = models.ForeignKey(PrivateSingleAverage, on_delete=models.CASCADE)
+    h0_h5 = models.FloatField()
+    h5_h10 = models.FloatField()
+    h10_h15 = models.FloatField()
+    h15_h20 = models.FloatField()
+    h20_h24 = models.FloatField()
+
+    def __str__(self):
+        return self.measurement_id
+
+    class Meta:
+        db_table = "Time_filter_private_single"

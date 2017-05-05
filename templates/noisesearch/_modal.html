@@ -33,6 +33,41 @@
                                 <td class="dateTime">{{ [0].fields.end_time }}</td>
                             </tr>
 
+                            {{#if [0].time_filter.[0].fields.h0_h5 }}
+                            <tr>
+                                <td>from 0h - 5h:</td>
+                                <td>{{ [0].time_filter.[0].fields.h0_h5 }} dB</td>
+                            </tr>
+                            {{/if}}
+
+                            {{#if [0].time_filter.[0].fields.h5_h10 }}
+                            <tr>
+                                <td>from 5h - 10h:</td>
+                                <td>{{ [0].time_filter.[0].fields.h5_h10 }} dB</td>
+                            </tr>
+                            {{/if}}
+
+                            {{#if [0].time_filter.[0].fields.h10_h15 }}
+                            <tr>
+                                <td>from 10h - 15h:</td>
+                                <td>{{ [0].time_filter.[0].fields.h10_h15 }} dB</td>
+                            </tr>
+                            {{/if}}
+
+                            {{#if [0].time_filter.[0].fields.h15_h20 }}
+                            <tr>
+                                <td>from 15h - 20h:</td>
+                                <td>{{ [0].time_filter.[0].fields.h0_h5 }} dB</td>
+                            </tr>
+                            {{/if}}
+
+                            {{#if [0].time_filter.[0].fields.h20_h24 }}
+                            <tr>
+                                <td>from 20h - 24h:</td>
+                                <td>{{ [0].time_filter.[0].fields.h20_h24 }} dB</td>
+                            </tr>
+                            {{/if}}
+
                             <tr>
                                 <td>Device ID:</td>
                                 <td>{{ [0].fields.device_id }}</td>
@@ -58,3 +93,6 @@
     </div>
 </script>
 {% endverbatim %}
+
+
+{#[0].average_objects.fields.average_spl#}

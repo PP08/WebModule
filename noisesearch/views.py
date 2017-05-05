@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import PrivateSingleAverage, PublicSingleAverage, PublicSingleDetail, \
-    PrivateSingleDetail, PrivateMultipleAverage, PrivateMultipleDetail, PublicMultipleAverage, PublicMultipleDetail
+    PrivateSingleDetail, PrivateMultipleAverage, PrivateMultipleDetail, PublicMultipleAverage, PublicMultipleDetail, TimeFilterPrivateSingle, TimeFilterPublicSingle
 from django.core import serializers
 import json
 from django.http import HttpResponse
@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 
 from django.core.serializers.json import DjangoJSONEncoder
+from django.core.exceptions import ObjectDoesNotExist
 import ast
 
 
@@ -81,8 +82,13 @@ def home_page(request):
 def get_details_pbs(request):
     indices = request.GET.getlist('ids[]')
     data = []
+    time_filtered = []
     for id in indices:
-        data.append(json.loads(serializers.serialize('json', PublicSingleAverage.objects.filter(id=int(id)))))
+        dict_data = json.loads(serializers.serialize('json', PublicSingleAverage.objects.filter(id=int(id))))
+        dict_data[0]['time_filter'] = json.loads(serializers.serialize('json', TimeFilterPublicSingle.objects.filter(measurement_id_id=int(id))))
+        # print(test[0])
+        data.append(dict_data)
+        # time_filtered.append(json.loads(serializers.serialize('json', TimeFilterPublicSingle.objects.filter(measurement_id_id=int(id)))))
 
     data = json.dumps(data)
 
@@ -103,14 +109,17 @@ def get_details_prs(request):
     else:
         data = []
         for id in indices:
-            data.append(json.loads(serializers.serialize('json', PrivateSingleAverage.objects.filter(id=int(id)))))
+            dict_data = json.loads(serializers.serialize('json', PrivateSingleAverage.objects.filter(id=int(id))))
+            dict_data[0]['time_filter'] = json.loads(
+                serializers.serialize('json', TimeFilterPrivateSingle.objects.filter(measurement_id_id=int(id))))
+            # data.append(json.loads(serializers.serialize('json', PrivateSingleAverage.objects.filter(id=int(id)))))
+            data.append(dict_data)
 
         data = json.dumps(data)
 
         return HttpResponse(
             data,
             content_type="application/json")
-
 
 @csrf_exempt
 def data_filter(request):
@@ -455,12 +464,25 @@ def change_state_single(request):
                 prs_object = PrivateSingleAverage.objects.get(id=int(id))
                 prsd_object = PrivateSingleDetail.objects.filter(measurement_id_id=int(id))
 
+                try:
+                    prsf_object = TimeFilterPrivateSingle.objects.get(measurement_id_id=int(id))
+                except ObjectDoesNotExist:
+                    prsf_object = None
+
+                # print(prsf_object)
+
                 pbs = PublicSingleAverage(device_id=prs_object.device_id, latitude=prs_object.latitude,
                                           longitude=prs_object.longitude,
                                           average_spl=prs_object.average_spl, duration=prs_object.duration,
                                           start_time=prs_object.start_time,
                                           end_time=prs_object.end_time, user_name=prs_object.user_name)
                 pbs.save()
+
+                if (prsf_object != None):
+                    pbsf = TimeFilterPublicSingle(h0_h5=prsf_object.h0_h5, h5_h10=prsf_object.h5_h10, h10_h15=prsf_object.h10_h15,
+                                                  h15_h20=prsf_object.h15_h20, h20_h24=prsf_object.h20_h24, measurement_id_id=pbs.id)
+                    pbsf.save()
+                    prsf_object.delete()
 
                 new_ids.append(pbs.id)
 
@@ -475,6 +497,7 @@ def change_state_single(request):
                 prs_object.delete()
                 prsd_object.delete()
 
+
     elif model_name == 'publicSingle':
         """"""
         if PublicSingleAverage.objects.get(id=int(ids[0])).user_name == str(request.user):
@@ -482,12 +505,27 @@ def change_state_single(request):
                 pbs_object = PublicSingleAverage.objects.get(id=int(id))
                 pbsd_object = PublicSingleDetail.objects.filter(measurement_id_id=int(id))
 
+                try:
+                    pbsf_object = TimeFilterPublicSingle.objects.get(measurement_id_id=int(id))
+
+                except ObjectDoesNotExist:
+                    pbsf_object = None
+
                 prs = PrivateSingleAverage(device_id=pbs_object.device_id, latitude=pbs_object.latitude,
                                            longitude=pbs_object.longitude,
                                            average_spl=pbs_object.average_spl, duration=pbs_object.duration,
                                            start_time=pbs_object.start_time,
                                            end_time=pbs_object.end_time, user_name=pbs_object.user_name)
                 prs.save()
+
+                if pbsf_object != None:
+                    prsf = TimeFilterPrivateSingle(h0_h5=pbsf_object.h0_h5, h5_h10=pbsf_object.h5_h10,
+                                                  h10_h15=pbsf_object.h10_h15,
+                                                  h15_h20=pbsf_object.h15_h20, h20_h24=pbsf_object.h20_h24,
+                                                  measurement_id_id=prs.id)
+
+                    prsf.save()
+                    pbsf_object.delete()
 
                 new_ids.append(prs.id)
 
@@ -501,6 +539,7 @@ def change_state_single(request):
                     prsd.save()
                 pbs_object.delete()
                 pbsd_object.delete()
+
                 # return_data = {'message': 'success', 'ids': new_ids, 'objects': return_objects}
 
     # returnString = ""

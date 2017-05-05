@@ -71,7 +71,10 @@ function get_details(clicked_id) {
                 var myModal = document.getElementById('modal');
                 var modal_template = Handlebars.compile(document.getElementById('modal-template').innerHTML);
 
+                console.log(data);
+
                 var context = {objects: data};
+
                 myModal.innerHTML = modal_template(context);
 
                 $('.modal').modal();
