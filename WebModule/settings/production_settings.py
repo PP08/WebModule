@@ -145,5 +145,4 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 STATICFILES_DIRS = [
     "noisesearch/static",
-    "noisesearch/static/js/leaflet/images",
 ]
