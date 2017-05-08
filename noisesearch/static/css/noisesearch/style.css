@@ -122,3 +122,7 @@ nav ul a {
 #btn-filter-trigger {
     background-color: #FD8A80 !important;
 }
+
+input.geocoder-control-input.leaflet-bar {
+    background-color: white;
+}

@@ -19,6 +19,31 @@ function initialize_map(points, location) {
     });
     layout.addTo(mymap);
 
+    //search control for map
+
+    var arcgisOnline = L.esri.Geocoding.arcgisOnlineProvider();
+
+    var searchControl = L.esri.Geocoding.geosearch({
+        providers: [
+            arcgisOnline,
+            L.esri.Geocoding.mapServiceProvider({
+                label: 'States and Counties',
+                url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer',
+                layers: [2, 3],
+                searchFields: ['NAME', 'STATE_NAME']
+            })
+        ]
+    }).addTo(mymap);
+
+    // var results = L.layerGroup().addTo(map);
+    //
+    // searchControl.on('results', function (data) {
+    //     // results.clearLayers();
+    //     for (var i = data.results.length - 1; i >= 0; i--) {
+    //         results.addLayer(L.marker(data.results[i].latlng));
+    //     }
+    // });
+
     markers = new L.FeatureGroup();
     addMarkers(points);
 }
