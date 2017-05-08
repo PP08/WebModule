@@ -125,4 +125,5 @@ nav ul a {
 
 input.geocoder-control-input.leaflet-bar {
     background-color: white;
+    border-radius: 5px;
 }
