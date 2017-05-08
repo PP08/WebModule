@@ -26,7 +26,7 @@ function initialize_map(points, location) {
 
         var RedIcon = L.Icon.Default.extend({
             options: {
-            	    iconUrl: '/marker-icon-red.png'
+            	    iconUrl: 'marker-icon-red.png'
             }
          });
 
