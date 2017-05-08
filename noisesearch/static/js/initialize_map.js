@@ -19,30 +19,33 @@ function initialize_map(points, location) {
     });
     layout.addTo(mymap);
 
-    //search control for map
+    var searchControl = L.esri.Geocoding.geosearch().addTo(mymap);
+    var results = L.layerGroup().addTo(mymap);
 
-    var arcgisOnline = L.esri.Geocoding.arcgisOnlineProvider();
+    searchControl.on("results", function (data) {
 
-    var searchControl = L.esri.Geocoding.geosearch({
-        providers: [
-            arcgisOnline,
-            L.esri.Geocoding.mapServiceProvider({
-                label: 'States and Counties',
-                url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer',
-                layers: [2, 3],
-                searchFields: ['NAME', 'STATE_NAME']
-            })
-        ]
-    }).addTo(mymap);
+        var RedIcon = L.Icon.Default.extend({
+            options: {
+            	    iconUrl: 'marker-icon-red.png'
+            }
+         });
 
-    // var results = L.layerGroup().addTo(map);
-    //
-    // searchControl.on('results', function (data) {
-    //     // results.clearLayers();
-    //     for (var i = data.results.length - 1; i >= 0; i--) {
-    //         results.addLayer(L.marker(data.results[i].latlng));
-    //     }
-    // });
+        var redIcon = new RedIcon();
+
+        results.clearLayers();
+        for (var i = data.results.length - 1; i >= 0; i--) {
+
+            var mk = L.marker(data.results[i].latlng, {icon: redIcon});
+
+            mk.bindPopup('<p class="center-align">Place: ' + data.results[i].properties.PlaceName +'</p>' +
+                '<p class="center-align">Address: ' + data.results[i].properties.Place_addr +'</p>').openPopup();
+
+            // console.log(data.results[i]);
+
+            results.addLayer(mk);
+        }
+    });
+
 
     markers = new L.FeatureGroup();
     addMarkers(points);
