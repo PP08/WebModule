@@ -24,21 +24,20 @@ function initialize_map(points, location) {
 
     searchControl.on("results", function (data) {
 
-        var RedIcon = L.Icon.Default.extend({
-            options: {
-            	    imagePath: 'marker-icon-red.png'
-            }
-         });
+        var RedIcon = L.icon({
+            iconUrl: 'static/js/leaflet/marker-icon-red.png',
+            shadowUrl: 'static/js/leaflet/marker-shadow.png',
+        });
 
-        var redIcon = new RedIcon();
+        //var redIcon = new RedIcon();
 
         results.clearLayers();
         for (var i = data.results.length - 1; i >= 0; i--) {
 
-            var mk = L.marker(data.results[i].latlng, {icon: redIcon});
+            var mk = L.marker(data.results[i].latlng, {icon: RedIcon});
 
-            mk.bindPopup('<p class="center-align">Place: ' + data.results[i].properties.PlaceName +'</p>' +
-                '<p class="center-align">Address: ' + data.results[i].properties.Place_addr +'</p>').openPopup();
+            mk.bindPopup('<p class="center-align">Place: ' + data.results[i].properties.PlaceName + '</p>' +
+                '<p class="center-align">Address: ' + data.results[i].properties.Place_addr + '</p>').openPopup();
 
             // console.log(data.results[i]);
 
