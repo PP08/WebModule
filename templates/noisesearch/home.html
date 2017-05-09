@@ -34,6 +34,12 @@
     {% include 'noisesearch/_filter_modal_sin.html' %}
     {% include 'noisesearch/_modal.html' %}
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.5/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.5/dist/MarkerCluster.Default.css">
+    <script src="https://unpkg.com/leaflet.markercluster@1.0.5/dist/leaflet.markercluster.js"></script>
+
+
+
     <script src="{% static 'js/initialize_map.js' %}"></script>
     <script src="{% static 'js/filter_request.js' %}"></script>
     <script src="{% static 'js/graphsRender.js' %}"></script>

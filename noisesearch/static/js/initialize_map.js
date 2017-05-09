@@ -45,8 +45,10 @@ function initialize_map(points, location) {
         }
     });
 
+    // markers = new L.FeatureGroup();
 
-    markers = new L.FeatureGroup();
+    markers = L.markerClusterGroup();
+
     addMarkers(points);
 }
 
@@ -60,9 +62,9 @@ function setHeightForMap() {
 function addMarkers(points) {
 
     var defaultIcon = L.icon({
-            iconUrl: 'static/js/leaflet/marker-icon.png',
-            shadowUrl: 'static/js/leaflet/marker-shadow.png',
-        });
+        iconUrl: 'static/js/leaflet/marker-icon.png',
+        shadowUrl: 'static/js/leaflet/marker-shadow.png',
+    });
 
     for (var i = 0; i < points.length; i++) {
         var latitude = points[i].latitude;
