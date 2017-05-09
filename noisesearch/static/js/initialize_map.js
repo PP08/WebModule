@@ -58,11 +58,17 @@ function setHeightForMap() {
 }
 
 function addMarkers(points) {
+
+    var defaultIcon = L.icon({
+            iconUrl: 'static/js/leaflet/marker-icon.png',
+            shadowUrl: 'static/js/leaflet/marker-shadow.png',
+        });
+
     for (var i = 0; i < points.length; i++) {
         var latitude = points[i].latitude;
         var longitude = points[i].longitude;
         var splvalue = points[i].average_spl;
-        var marker = L.marker([latitude, longitude]);
+        var marker = L.marker([latitude, longitude], {icon: defaultIcon});
         marker.bindPopup('<div class="center-align"><b>SPL value:</b> ' + splvalue.toString() + '<b> dB</b></div><br><br> ' +
             'Calculated from ' + points[i].ids.length.toString() + ' measurement(s)<br><br>' +
             '<div class="center-div"><button type="button" class="btn btn-default center-div" id="' + i.toString() + '" onClick="get_details(this.id)">Details</button></div>');
