@@ -39,38 +39,36 @@ def save_private_data_single(file_path, username):
 
     ranges = divide_by_time(file)
 
-    spl_value_0h_5h, spl_value_5h_10h, spl_value_10h_15h, spl_value_15h_20h, spl_value_20h_24h = 0.0
-
     if (ranges[0][0] != -1):
         spl_value_0h_5h = round(file['Pressure'][ranges[0][0]: ranges[0][1]].mean(), 2)
 
-    # else:
-    #     spl_value_0h_5h = 0
+    else:
+        spl_value_0h_5h = 0.0
 
     if (ranges[1][0] != -1):
         spl_value_5h_10h = round(file['Pressure'][ranges[1][0]: ranges[1][1]].mean(), 2)
-    # else:
-    #     spl_value_5h_10h = 0
+    else:
+        spl_value_5h_10h = 0.0
 
     if (ranges[2][0] != -1):
         spl_value_10h_15h = round(file['Pressure'][ranges[2][0]: ranges[2][1]].mean(), 2)
 
-    # else:
-    #     spl_value_10h_15h = 0
+    else:
+        spl_value_10h_15h = 0.0
 
     if (ranges[3][0] != -1):
         spl_value_15h_20h = round(file['Pressure'][ranges[3][0]: ranges[3][1]].mean(), 2)
-    # else:
-    #     spl_value_15h_20h = 0
+    else:
+        spl_value_15h_20h = 0.0
 
     if (ranges[4][0] != -1):
         spl_value_20h_24h = round(file['Pressure'][ranges[4][0]: ranges[4][1]].mean(), 2)
-    # else:
-    #     spl_value_20h_24h = 0
+    else:
+        spl_value_20h_24h = 0.0
 
     devided_by_time_object = TimeFilterPrivateSingle(measurement_id_id=measurement_id, h0_h5=spl_value_0h_5h,
-                                                    h5_h10=spl_value_5h_10h, h10_h15=spl_value_10h_15h,
-                                                    h15_h20=spl_value_15h_20h, h20_h24=spl_value_20h_24h)
+                                                     h5_h10=spl_value_5h_10h, h10_h15=spl_value_10h_15h,
+                                                     h15_h20=spl_value_15h_20h, h20_h24=spl_value_20h_24h)
 
     devided_by_time_object.save()
 
@@ -237,6 +235,8 @@ def divide_by_time(file):
                 end = i
                 ranges.append([start, end])
                 start = i
+    else:
+        ranges.append([-1, -1])
 
     if start < len(file) - 1:
         if datetime.strptime(str(file['Timestamp'][start][11:]), time_format) >= datetime.strptime('05:00:00',
