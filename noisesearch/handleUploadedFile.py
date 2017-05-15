@@ -293,7 +293,7 @@ def divide_by_time(file):
         if datetime.strptime(str(file['Timestamp'][start][11:]), time_format) >= datetime.strptime('20:00:00',
                                                                                                    time_format):
             for i in range(start, len(file)):
-                if datetime.strptime(str(file['Timestamp'][i][11:]), time_format) > datetime.strptime('24:00:00',
+                if datetime.strptime(str(file['Timestamp'][i][11:]), time_format) > datetime.strptime('23:59:59',
                                                                            time_format):
                     ranges.append([start, end])
                     # start = i
