@@ -52,11 +52,25 @@ function addTrackers(points, average_values) {
 
             var point = new L.LatLng(points[i][j]['fields'].latitude, points[i][j]['fields'].longitude);
             polyline_points.push(point);
+
+            console.log(points[i][j]['fields'].spl_value);
+
+            var circle_color;
+            if (points[i][j]['fields'].spl_value <= 40){
+                circle_color = '#41A43C';
+            }else if (points[i][j]['fields'].spl_value > 40 && points[i][j]['fields'].spl_value <= 70){
+                circle_color = '#8DC451';
+            } else if (points[i][j]['fields'].spl_value > 70 && points[i][j]['fields'].spl_value <= 90){
+                circle_color = '#F38018';
+            } else{
+                circle_color = '#E7121C';
+            }
+
             var circle = L.circle(point, {
                 color: '#F5F5F5',
-                fillColor: '#57B2F1',
+                fillColor: circle_color,
                 fillOpacity: 1,
-                radius: 1,
+                radius: 6,
                 weight: 4
             });
             circle.bindPopup("<p class='center-align'><b>SPL: " + points[i][j]['fields'].spl_value + " dB</b></p><br><div class='center-div'>" +
@@ -70,12 +84,12 @@ function addTrackers(points, average_values) {
         var start_point_marker = L.marker(polyline_points[0]);
         var end_point_marker = L.marker(polyline_points[polyline_points.length - 1]);
 
-        start_point_marker.bindPopup("<p class='center-align'><b>Start Point</b></p><p class='center-align'>" +
+        start_point_marker.bindPopup("<p class='center-align'><b>Start Point " + i + " </b></p><p class='center-align'>" +
             "Average SPL: " + average_values[i]['fields'].average_spl + " dB</p><br><div class='center-div'>" +
             "<button class='btn' id='btn-dtm-" + i + "' onClick='get_details_multiple(this.id)' >" +
             "Details</button></div>");
 
-        end_point_marker.bindPopup("<p class='center-align'><b>End Point</b></p><p class='center-align'>" +
+        end_point_marker.bindPopup("<p class='center-align'><b>End Point " + i +"</b></p><p class='center-align'>" +
             "Average SPL: " + average_values[i]['fields'].average_spl + " dB</p><br><div class='center-div'>" +
             "<button class='btn' id='btn-dtm-" + i + "' onClick='get_details_multiple(this.id)' >" +
             "Details</button></div>");
@@ -84,8 +98,8 @@ function addTrackers(points, average_values) {
         markers.addLayer(end_point_marker);
 
         var pathLine = new L.Polyline(polyline_points, {
-            color: 'red',
-            weight: 4,
+            color: '#008A9C',
+            weight: 6,
             opacity: 0.7,
             smoothFactor: 1
         });

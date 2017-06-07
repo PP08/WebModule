@@ -50,8 +50,8 @@
                 </ul>
                 <ul class="side-nav" id="mobile-demo">
                     <li><a href="{% url 'home' %}">Single Point</a></li>
-                    <li><a href="#">Multiple Points</a></li>
-                    <li><a href="#">About</a></li>
+                    <li><a href="{% url 'multiple_map' %}">Multiple Points</a></li>
+                    <li id="login-side-nav"><a href="{% url 'login' %}">Login</a></li>
                 </ul>
             </div>
         </nav>
@@ -86,6 +86,12 @@
 
                 if (user_name){
                     document.getElementById('login-nav').innerHTML = '<li><a class="dropdown-button" href="#!" data-activates="dropdown1">Hello, ' + user_name + '<i class="material-icons right">arrow_drop_down</i></a></li>';
+
+                    var url = '{% url 'data_manager' %}';
+
+{#                    console.log(url);#}
+
+                    document.getElementById('login-side-nav').innerHTML = '<li id="login-side-nav"><a href="'+ url + '">Hello, ' + user_name +'</a></li>';
                 }
 
                 $(".dropdown-button").dropdown();
