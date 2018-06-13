@@ -24,9 +24,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'zxz^#oy&84n!!35t(i1^!&n+81*#9)su$!b#roc)7h54j4w)6$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', '192.168.1.43', '172.20.10.13', 'https://noisesearch.herokuapp.com',]
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -77,16 +77,16 @@ WSGI_APPLICATION = 'WebModule.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'noisesearch',
-#         'USER': 'phucphuong',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'noisesearch',
+        'USER': 'phucphuong',
+        'PASSWORD': 'phucphuong',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -150,9 +150,9 @@ REST_FRAMEWORK = {
 }
 
 # SECRET_KEY = dj_database_url.config('zxz^#oy&84n!!35t(i1^!&n+81*#9)su$!b#roc)7h54j4w)6$')
-DEBUG = dj_database_url.config('DEBUG', default=False)
-DATABASES = {
-    'default': dj_database_url.config(
-        default=dj_database_url.config('DATABASE_URL')
-    )
-}
+# DEBUG = dj_database_url.config('DEBUG', default=True)
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=dj_database_url.config('DATABASE_URL')
+#     )
+# }
